@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../base
+images:
+- name: daimler/kosmoo
+  newName: other/kosmoo
+  newTag: new

@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: MIT
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kosmoo
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kosmoo
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9183"
+        prometheus.io/scrape: "true"
+      labels:
+        name: kosmoo
+    spec:
+      containers:
+      - args:
+        - -refresh-interval=300
+        - -cloud-conf=/etc/cloud.conf
+        image: daimler/kosmoo:latest
+        imagePullPolicy: Always
+        name: exporter
+        ports:
+        - containerPort: 9183
+          name: kosmoo
+          protocol: TCP
+        securityContext:
+          privileged: false
+          # necessary because of /etc/cloud.conf readability
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /etc/cloud.conf
+          name: cloud-conf
+        resources:
+          limits:
+            memory: 40Mi
+          requests:
+            cpu: 5m
+            memory: 40Mi
+      volumes:
+      - hostPath:
+          path: /etc/cloud.conf
+          type: ""
+        name: cloud-conf
+      serviceAccountName: kosmoo
