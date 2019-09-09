@@ -32,7 +32,7 @@ When submitting code, please make every effort to follow existing conventions an
 
 If you are new to contributing in Github, [First Contributions](https://github.com/firstcontributions/first-contributions) might be a good starting point.
 
-Before you can contribute, you will need to sign our CLA and send the signed CLA to foss@daimler.com.
+Before you can contribute, you will need to sign our CLA and send the signed CLA to cla-tss@daimler.com.
 
 ## Quality
 Please ensure that for all contributions, the corresponding documentation is in-sync and up-to-date. All documentation should be in English language. 
