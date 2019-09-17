@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Kosmoo
 
+<img src="./logo/logo.png" width="300">
+
 *Kosmoo* exposes metrics about:
 * [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) by queries to the Kubernetes API
 * [Cinder](https://docs.openstack.org/cinder/latest/) and its Disks by queries to the OpenStack API combined with data from the Kubernetes API
