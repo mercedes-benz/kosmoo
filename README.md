@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Kosmoo
 
+[![Build Status](https://dev.azure.com/daimler-opensource/Kosmoo/_apis/build/status/Daimler.kosmoo?branchName=master)](https://dev.azure.com/daimler-opensource/Kosmoo/_build/latest?definitionId=2&branchName=master)
+
 <img src="./logo/logo.png" width="300">
 
 *Kosmoo* exposes metrics about:
