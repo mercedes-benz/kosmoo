@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+# Pipeline to run CI
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: make all
+      run: |
+        make all
