@@ -18,7 +18,7 @@ jobs:
         make all
     - name: generate changelog from git
       run: |
-        echo "Image is available at \`docker.pkg.github.com/${GITHUB_REPOSITORY}/kosmoo:$(git describe --tags --exact-match)\`." > ${{ github.workflow }}-CHANGELOG.txt
+        echo "Image is available at \`docker.pkg.github.com/daimler/kosmoo/kosmoo:$(git describe --tags --exact-match)\`." > ${{ github.workflow }}-CHANGELOG.txt
         git log --format=format:"* %h %s" $(git describe --tags --abbrev=0 @^)..@ >> ${{ github.workflow }}-CHANGELOG.txt
     - name: push to package registry
       run: |
