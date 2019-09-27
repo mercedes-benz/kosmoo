@@ -16,7 +16,7 @@ array_contains() {
 }
 
 HEADER="SPDX-License-Identifier: MIT"
-HEADER_WHITELIST=("./go.sum" "./LICENSE" "./kosmoo")
+HEADER_WHITELIST=("./go.sum" "./LICENSE" "./kosmoo" "./logo/logo.png")
 
 all_files=()
 export IFS=$'\n'
@@ -45,4 +45,5 @@ else
     echo 'Please review the above files. They seem to miss the following header as comment:'
     echo "$HEADER"
     echo
+    exit 1
 fi

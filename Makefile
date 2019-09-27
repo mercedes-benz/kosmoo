@@ -6,16 +6,13 @@ SHELL := /bin/bash
 TARGET := $(shell echo $${PWD\#\#*/})
 
 GOOS ?= $(shell go env GOOS)
-VERSION ?= $(shell git describe --exact-match 2> /dev/null || \
+VERSION ?= $(shell git describe --tags --exact-match || \
+	     git describe --exact-match 2> /dev/null || \
              git describe --match=$(git rev-parse --short=8 HEAD) --always --dirty --abbrev=8)
 
 SRCS = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
-GOLANGCI_URL = 
-https://github.com/golangci/golangci-lint/releases/download/v1.17.1/golangci-lint-1.17.1-linux-amd64.tar.gz \
-golangci-lint-1.17.1-linux-amd64.tar.gz
-
-REGISTRY ?= daimler
+REGISTRY ?= docker.pkg.github.com/daimler/kosmoo
 
 all: test build docker
 
@@ -28,6 +25,9 @@ docker: build
 	cp kosmoo kubernetes/
 	docker build -t $(REGISTRY)/kosmoo:$(VERSION) kubernetes/
 	rm kubernetes/kosmoo
+
+push:
+	docker push $(REGISTRY)/kosmoo:$(VERSION)
 
 fmt:
 	@go fmt -l -w $(SRCS)
