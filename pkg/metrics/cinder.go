@@ -21,7 +21,7 @@ var (
 	defaultLabels = []string{"id", "description", "name", "status", "cinder_availability_zone", "volume_type", "pvc_name", "pvc_namespace", "pv_name", "pv_storage_class", "pv_reclaim_policy", "pv_fs_type"}
 
 	// possible cinder states
-	cinderStates = []string{"available", "error", "creating", "deleting", "in-use", "attaching", "detaching", "error_deleting", "maintenance"}
+	cinderStates = []string{"available", "error", "creating", "deleting", "in-use", "attaching", "detaching", "error_deleting", "maintenance", "reserved"}
 
 	cinderQuotaVolumes         *prometheus.GaugeVec
 	cinderQuotaVolumesGigabyte *prometheus.GaugeVec
