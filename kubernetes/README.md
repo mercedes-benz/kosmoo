@@ -23,6 +23,3 @@ To apply the deployment with patches for the container image to your cluster:
 ```
 kubectl apply -k kubernetes/overlays/examples
 ```
-
-# License
-
