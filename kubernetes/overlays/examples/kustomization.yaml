@@ -4,6 +4,6 @@ kind: Kustomization
 bases:
 - ../../base
 images:
-- name: daimler/kosmoo
+- name: docker.pkg.github.com/daimler/kosmoo/kosmoo
   newName: other/kosmoo
   newTag: new

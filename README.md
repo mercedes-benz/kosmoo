@@ -74,6 +74,10 @@ Usage of ./kosmoo:
 ## Deployment to Kubernetes
 
 *kosmoo* can get deployed as a deployment. See the [instructions](kubernetes/) how to get started.
+You can also use the docker images under [packages](https://github.com/Daimler/kosmoo/packages), 
+see also [authenticating-to-github-package-registry](https://help.github.com/en/articles/configuring-docker-for-use-with-github-package-registry#authenticating-to-github-package-registry).
+
+
 
 ## Metrics
 
