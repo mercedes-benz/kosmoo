@@ -30,7 +30,7 @@ push:
 	docker push $(REGISTRY)/kosmoo:$(VERSION)
 
 fmt:
-	@go fmt -l -w $(SRCS)
+	@gofmt -l -w $(SRCS)
 
 test: vet fmtcheck spdxcheck lint
 
