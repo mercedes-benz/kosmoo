@@ -7,7 +7,7 @@ This alerts assume that the parameter `metrics-prefix` was not changed and still
 
 ```
   - alert: CinderDiskStuck
-    expr: kos_cinder_volume_status{status=~".*ing"} == 1
+    expr: kos_cinder_volume_status{status!~"available|in-use"} == 1
     for: 30m
     labels:
       severity: critical
