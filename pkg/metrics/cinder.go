@@ -20,8 +20,8 @@ var (
 	// labels which get applied to the most metrics
 	defaultLabels = []string{"id", "description", "name", "status", "cinder_availability_zone", "volume_type", "pvc_name", "pvc_namespace", "pv_name", "pv_storage_class", "pv_reclaim_policy", "pv_fs_type"}
 
-	// possible cinder states
-	cinderStates = []string{"available", "error", "creating", "deleting", "in-use", "attaching", "detaching", "error_deleting", "maintenance", "reserved"}
+	// possible cinder states, from https://github.com/openstack/cinder/blob/master/cinder/objects/fields.py#L168
+	cinderStates = []string{"creating", "available", "deleting", "error", "error_deleting", "error_managing", "managing", "attaching", "in-use", "detaching", "maintenance", "restoring-backup", "error_restoring", "reserved", "awaiting-transfer", "backing-up", "error_backing-up", "error_extending", "downloading", "uploading", "retyping", "extending"}
 
 	cinderQuotaVolumes         *prometheus.GaugeVec
 	cinderQuotaVolumesGigabyte *prometheus.GaugeVec
