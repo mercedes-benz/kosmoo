@@ -1,7 +1,8 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Kosmoo
 
-[![Build Status](https://dev.azure.com/daimler-opensource/Kosmoo/_apis/build/status/Daimler.kosmoo?branchName=master)](https://dev.azure.com/daimler-opensource/Kosmoo/_build/latest?definitionId=2&branchName=master)
+[![Build Status](https://github.com/Daimler/kosmoo/workflows/.github%2Fworkflows%2Fci.yml/badge.svg)](https://github.com/Daimler/kosmoo/actions?query=workflow%3A.github%2Fworkflows%2Fci.yml)
+[![Release Status](https://github.com/Daimler/kosmoo/workflows/release/badge.svg)](https://github.com/Daimler/kosmoo/actions?query=workflow%3Arelease)
 
 <img src="./logo/logo.png" width="300">
 
