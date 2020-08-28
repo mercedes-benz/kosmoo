@@ -19,6 +19,7 @@ var (
 func RegisterMetrics(prefix string) {
 	metricsPrefix = prefix
 	registerCinderMetrics()
+	registerNeutronMetrics()
 }
 
 // AddPrefix adds the given prefix to the string, if set
