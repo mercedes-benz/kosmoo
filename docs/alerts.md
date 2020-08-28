@@ -44,7 +44,7 @@ This alerts assume that the parameter `metrics-prefix` was not changed and still
       severity: warning
       team: caas
     annotations:
-      summary: Cinder disk {{ $labels.id }} has unkown state
+      summary: Cinder disk {{ $labels.id }} has unknown state
       impact: Aliens invaded. A bit flipped. OpenStack my be broken. At least, we don't know what's going on right now.
       action: Check volume state and extend OpenStack Exporter code if required.
 ```

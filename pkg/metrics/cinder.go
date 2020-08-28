@@ -95,9 +95,9 @@ func registerCinderMetrics() {
 
 // ScrapeCinderMetrics makes the list request to the blockstorage api and passes
 // the result to a scrape function.
-func ScrapeCinderMetrics(provider *gophercloud.ProviderClient, clientset *kubernetes.Clientset, tenantID string) error {
+func ScrapeCinderMetrics(provider *gophercloud.ProviderClient, eo gophercloud.EndpointOpts, clientset *kubernetes.Clientset, tenantID string) error {
 	// get the cinder client
-	client, err := openstack.NewBlockStorageV2(provider, gophercloud.EndpointOpts{Region: "nova"})
+	client, err := openstack.NewBlockStorageV2(provider, eo)
 	if err != nil {
 		return fmt.Errorf("unable to get cinder client: %v", err)
 	}

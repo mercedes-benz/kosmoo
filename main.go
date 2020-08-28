@@ -117,20 +117,27 @@ func main() {
 
 // run does the initialization of the operational exporter and also the metrics scraping
 func run() error {
-	var opts gophercloud.AuthOptions
+	var authOpts gophercloud.AuthOptions
+	var endpointOpts gophercloud.EndpointOpts
 	var err error
 
 	// get OpenStack credentials
 	if *cloudConfFile != "" {
-		opts, err = authOptsFromCloudConf(*cloudConfFile)
+		authOpts, endpointOpts, err = authOptsFromCloudConf(*cloudConfFile)
 		if err != nil {
 			return logError("unable to read OpenStack credentials from cloud.conf: %v", err)
 		}
 		klog.Infof("OpenStack credentials read from cloud.conf file at %s", *cloudConfFile)
 	} else {
-		opts, err = openstack.AuthOptionsFromEnv()
+		authOpts, err = openstack.AuthOptionsFromEnv()
 		if err != nil {
 			return logError("unable to get authentication credentials from environment: %v", err)
+		}
+		endpointOpts = gophercloud.EndpointOpts{
+			Region: os.Getenv("OS_REGION_NAME"),
+		}
+		if endpointOpts.Region == "" {
+			endpointOpts.Region = "nova"
 		}
 		klog.Info("OpenStack credentials read from environment")
 	}
@@ -147,17 +154,17 @@ func run() error {
 	}
 
 	// authenticate to OpenStack
-	provider, err := openstack.AuthenticatedClient(opts)
+	provider, err := openstack.AuthenticatedClient(authOpts)
 	if err != nil {
 		return logError("unable to authenticate to OpenStack: %v", err)
 	}
 	_ = provider
 
-	klog.Infof("OpenStack authentication was successful: username=%s, tenant-id=%s, tenant-name=%s", opts.Username, opts.TenantID, opts.TenantName)
+	klog.Infof("OpenStack authentication was successful: username=%s, tenant-id=%s, tenant-name=%s", authOpts.Username, authOpts.TenantID, authOpts.TenantName)
 
 	// start scraping loop
 	for {
-		err := updateMetrics(provider, clientset, opts.TenantID)
+		err := updateMetrics(provider, endpointOpts, clientset, authOpts.TenantID)
 		if err != nil {
 			return err
 		}
@@ -187,19 +194,19 @@ func run() error {
 // 	}
 
 // authOptsFromCloudConf reads the cloud.conf from `path` and returns the read AuthOptions
-func authOptsFromCloudConf(path string) (gophercloud.AuthOptions, error) {
+func authOptsFromCloudConf(path string) (gophercloud.AuthOptions, gophercloud.EndpointOpts, error) {
 
 	cfg, err := ini.Load(path)
 	if err != nil {
-		return gophercloud.AuthOptions{}, fmt.Errorf("unable to read cloud.conf content: %v", err)
+		return gophercloud.AuthOptions{}, gophercloud.EndpointOpts{}, fmt.Errorf("unable to read cloud.conf content: %v", err)
 	}
 
 	global, err := cfg.GetSection("Global")
 	if err != nil {
-		return gophercloud.AuthOptions{}, fmt.Errorf("unable get Global section: %v", err)
+		return gophercloud.AuthOptions{}, gophercloud.EndpointOpts{}, fmt.Errorf("unable get Global section: %v", err)
 	}
 
-	opts := gophercloud.AuthOptions{
+	ao := gophercloud.AuthOptions{
 		IdentityEndpoint: global.Key("auth-url").String(),
 		Username:         global.Key("username").String(),
 		UserID:           global.Key("user-id").String(),
@@ -210,17 +217,20 @@ func authOptsFromCloudConf(path string) (gophercloud.AuthOptions, error) {
 		TenantName:       global.Key("tenant-name").String(),
 		AllowReauth:      true,
 	}
+	eo := gophercloud.EndpointOpts{
+		Region: global.Key("region").String(),
+	}
 
-	return opts, nil
+	return ao, eo, nil
 }
 
-func updateMetrics(provider *gophercloud.ProviderClient, clientset *kubernetes.Clientset, tenantID string) error {
+func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.EndpointOpts, clientset *kubernetes.Clientset, tenantID string) error {
 	metricsMutex.Lock()
 	defer metricsMutex.Unlock()
 
 	var errs []error
 	scrapeStart := time.Now()
-	if err := metrics.ScrapeCinderMetrics(provider, clientset, tenantID); err != nil {
+	if err := metrics.ScrapeCinderMetrics(provider, eo, clientset, tenantID); err != nil {
 		err := logError("scraping cinder metrics failed: %v", err)
 		errs = append(errs, err)
 	}
