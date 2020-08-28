@@ -3,10 +3,7 @@
 package metrics
 
 import (
-	"fmt"
-
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/extensions/quotasets"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/v2/volumes"
 	"github.com/gophercloud/gophercloud/pagination"
@@ -95,13 +92,7 @@ func registerCinderMetrics() {
 
 // ScrapeCinderMetrics makes the list request to the blockstorage api and passes
 // the result to a scrape function.
-func ScrapeCinderMetrics(provider *gophercloud.ProviderClient, eo gophercloud.EndpointOpts, clientset *kubernetes.Clientset, tenantID string) error {
-	// get the cinder client
-	client, err := openstack.NewBlockStorageV2(provider, eo)
-	if err != nil {
-		return fmt.Errorf("unable to get cinder client: %v", err)
-	}
-
+func ScrapeCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernetes.Clientset, tenantID string) error {
 	// get the cinder pvs to add metadata
 	pvs, err := getPVsByCinderID(clientset)
 	if err != nil {
