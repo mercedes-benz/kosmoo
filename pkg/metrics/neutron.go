@@ -49,8 +49,9 @@ func registerNeutronMetrics() {
 // the result to a scrape function.
 func ScrapeNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID string) error {
 	// first step: gather the data
+	mc := newOpenStackMetric("floating_ip", "list")
 	pages, err := floatingips.List(neutronClient, floatingips.ListOpts{}).AllPages()
-	if err != nil {
+	if mc.Observe(err) != nil {
 		// only warn, maybe the next scrape will work.
 		klog.Warningf("Unable to scrape floating ips: %v", err)
 		return err

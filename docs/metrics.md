@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Metrics overview
 
+As addition to the following metrics the exporter exposes some basic `go_*`, `process_` and `promhttp_*` metrics.
+
 <!-- generated via `curl 127.0.0.1:9183/metrics 2>/dev/null| grep -E -e '^#.*kos'` -->
 ```
 # HELP kos_cinder_quota_volume_disk_gigabytes Cinder volume metric (GB)
@@ -27,122 +29,30 @@
 # TYPE kos_neutron_floatingip_created_at gauge
 # HELP kos_neutron_floatingip_updated_at Neutron floating ip updated at
 # TYPE kos_neutron_floatingip_updated_at gauge
+# HELP kos_openstack_api_request_duration_seconds Latency of an OpenStack API call
+# TYPE kos_openstack_api_request_duration_seconds histogram
+# HELP kos_openstack_api_requests_total Total number of OpenStack API calls
+# TYPE kos_openstack_api_requests_total counter
 # HELP kos_scrape_duration Time in seconds needed for the last scrape
 # TYPE kos_scrape_duration gauge
 # HELP kos_scrape_status_succeeded Scrape status succeeded
 # TYPE kos_scrape_status_succeeded gauge
 # HELP kos_scraped_at Timestamp when last scrape started
 # TYPE kos_scraped_at gauge
-
 ```
 
 # Example Metrics
 
+<!-- generated via `curl 127.0.0.1:9183/metrics 2>/dev/null| grep -E -e '^kos'` -->
 ```
-# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
-# TYPE go_gc_duration_seconds summary
-go_gc_duration_seconds{quantile="0"} 9.593e-06
-go_gc_duration_seconds{quantile="0.25"} 2.1835e-05
-go_gc_duration_seconds{quantile="0.5"} 2.8044e-05
-go_gc_duration_seconds{quantile="0.75"} 4.7323e-05
-go_gc_duration_seconds{quantile="1"} 0.00038982
-go_gc_duration_seconds_sum 0.000573893
-go_gc_duration_seconds_count 8
-# HELP go_goroutines Number of goroutines that currently exist.
-# TYPE go_goroutines gauge
-go_goroutines 16
-# HELP go_info Information about the Go environment.
-# TYPE go_info gauge
-go_info{version="go1.14"} 1
-# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.
-# TYPE go_memstats_alloc_bytes gauge
-go_memstats_alloc_bytes 3.74612e+06
-# HELP go_memstats_alloc_bytes_total Total number of bytes allocated, even if freed.
-# TYPE go_memstats_alloc_bytes_total counter
-go_memstats_alloc_bytes_total 1.7029728e+07
-# HELP go_memstats_buck_hash_sys_bytes Number of bytes used by the profiling bucket hash table.
-# TYPE go_memstats_buck_hash_sys_bytes gauge
-go_memstats_buck_hash_sys_bytes 1.448053e+06
-# HELP go_memstats_frees_total Total number of frees.
-# TYPE go_memstats_frees_total counter
-go_memstats_frees_total 265168
-# HELP go_memstats_gc_cpu_fraction The fraction of this program's available CPU time used by the GC since the program started.
-# TYPE go_memstats_gc_cpu_fraction gauge
-go_memstats_gc_cpu_fraction 6.579460364702177e-05
-# HELP go_memstats_gc_sys_bytes Number of bytes used for garbage collection system metadata.
-# TYPE go_memstats_gc_sys_bytes gauge
-go_memstats_gc_sys_bytes 3.582216e+06
-# HELP go_memstats_heap_alloc_bytes Number of heap bytes allocated and still in use.
-# TYPE go_memstats_heap_alloc_bytes gauge
-go_memstats_heap_alloc_bytes 3.74612e+06
-# HELP go_memstats_heap_idle_bytes Number of heap bytes waiting to be used.
-# TYPE go_memstats_heap_idle_bytes gauge
-go_memstats_heap_idle_bytes 6.0178432e+07
-# HELP go_memstats_heap_inuse_bytes Number of heap bytes that are in use.
-# TYPE go_memstats_heap_inuse_bytes gauge
-go_memstats_heap_inuse_bytes 6.176768e+06
-# HELP go_memstats_heap_objects Number of allocated objects.
-# TYPE go_memstats_heap_objects gauge
-go_memstats_heap_objects 34883
-# HELP go_memstats_heap_released_bytes Number of heap bytes released to OS.
-# TYPE go_memstats_heap_released_bytes gauge
-go_memstats_heap_released_bytes 5.9015168e+07
-# HELP go_memstats_heap_sys_bytes Number of heap bytes obtained from system.
-# TYPE go_memstats_heap_sys_bytes gauge
-go_memstats_heap_sys_bytes 6.63552e+07
-# HELP go_memstats_last_gc_time_seconds Number of seconds since 1970 of last garbage collection.
-# TYPE go_memstats_last_gc_time_seconds gauge
-go_memstats_last_gc_time_seconds 1.5986238572732615e+09
-# HELP go_memstats_lookups_total Total number of pointer lookups.
-# TYPE go_memstats_lookups_total counter
-go_memstats_lookups_total 0
-# HELP go_memstats_mallocs_total Total number of mallocs.
-# TYPE go_memstats_mallocs_total counter
-go_memstats_mallocs_total 300051
-# HELP go_memstats_mcache_inuse_bytes Number of bytes in use by mcache structures.
-# TYPE go_memstats_mcache_inuse_bytes gauge
-go_memstats_mcache_inuse_bytes 20832
-# HELP go_memstats_mcache_sys_bytes Number of bytes used for mcache structures obtained from system.
-# TYPE go_memstats_mcache_sys_bytes gauge
-go_memstats_mcache_sys_bytes 32768
-# HELP go_memstats_mspan_inuse_bytes Number of bytes in use by mspan structures.
-# TYPE go_memstats_mspan_inuse_bytes gauge
-go_memstats_mspan_inuse_bytes 167824
-# HELP go_memstats_mspan_sys_bytes Number of bytes used for mspan structures obtained from system.
-# TYPE go_memstats_mspan_sys_bytes gauge
-go_memstats_mspan_sys_bytes 180224
-# HELP go_memstats_next_gc_bytes Number of heap bytes when next garbage collection will take place.
-# TYPE go_memstats_next_gc_bytes gauge
-go_memstats_next_gc_bytes 6.770704e+06
-# HELP go_memstats_other_sys_bytes Number of bytes used for other system allocations.
-# TYPE go_memstats_other_sys_bytes gauge
-go_memstats_other_sys_bytes 1.916803e+06
-# HELP go_memstats_stack_inuse_bytes Number of bytes in use by the stack allocator.
-# TYPE go_memstats_stack_inuse_bytes gauge
-go_memstats_stack_inuse_bytes 753664
-# HELP go_memstats_stack_sys_bytes Number of bytes obtained from system for stack allocator.
-# TYPE go_memstats_stack_sys_bytes gauge
-go_memstats_stack_sys_bytes 753664
-# HELP go_memstats_sys_bytes Number of bytes obtained from system.
-# TYPE go_memstats_sys_bytes gauge
-go_memstats_sys_bytes 7.4268928e+07
-# HELP go_threads Number of OS threads created.
-# TYPE go_threads gauge
-go_threads 15
-# HELP kos_cinder_quota_volume_disk_gigabytes Cinder volume metric (GB)
-# TYPE kos_cinder_quota_volume_disk_gigabytes gauge
 kos_cinder_quota_volume_disk_gigabytes{quota_type="allocated"} 0
 kos_cinder_quota_volume_disk_gigabytes{quota_type="in-use"} 8
 kos_cinder_quota_volume_disk_gigabytes{quota_type="limit"} 768
 kos_cinder_quota_volume_disk_gigabytes{quota_type="reserved"} 0
-# HELP kos_cinder_quota_volume_disks Cinder volume metric (number of volumes)
-# TYPE kos_cinder_quota_volume_disks gauge
 kos_cinder_quota_volume_disks{quota_type="allocated"} 0
 kos_cinder_quota_volume_disks{quota_type="in-use"} 8
 kos_cinder_quota_volume_disks{quota_type="limit"} -1
 kos_cinder_quota_volume_disks{quota_type="reserved"} 0
-# HELP kos_cinder_volume_attached_at Cinder volume attached at
-# TYPE kos_cinder_volume_attached_at gauge
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="",hostname="",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",server_id="",status="available",volume_type="novassd"} 0
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="",hostname="",id="4607f294-739c-4595-8cd0-4dba40c451b0",name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_fs_type="xfs",pv_name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="pvc-retain",pvc_namespace="default",server_id="",status="available",volume_type="novassd"} 0
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="/dev/sdb",hostname="",id="9a74156a-2233-4b54-aeca-18ba72eb3f0b",name="pvc-f15c30a5-94b5-447e-862c-50e98750961d",pv_fs_type="xfs",pv_name="pvc-f15c30a5-94b5-447e-862c-50e98750961d",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-0",pvc_namespace="default",server_id="234162a9-ecaf-4f96-9fc9-78d2324e5e9b",status="in-use",volume_type="novassd"} 1.598575568e+09
@@ -151,8 +61,6 @@ kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Creat
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="/dev/sdc",hostname="",id="67653dda-d1b4-4280-92ec-1397c8a32da0",name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_fs_type="xfs",pv_name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-1",pvc_namespace="default",server_id="234162a9-ecaf-4f96-9fc9-78d2324e5e9b",status="in-use",volume_type="novassd"} 1.598575594e+09
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="/dev/sdc",hostname="",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",server_id="298e787c-5c1e-4ca3-a8db-c50c4d4c3bb8",status="in-use",volume_type="novassd"} 1.598575606e+09
 kos_cinder_volume_attached_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",device="/dev/sdc",hostname="",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",server_id="d1913d51-9588-471a-bc0d-94ad3a2e5ff2",status="in-use",volume_type="novassd"} 1.598575605e+09
-# HELP kos_cinder_volume_created_at Cinder volume created at
-# TYPE kos_cinder_volume_created_at gauge
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="available",volume_type="novassd"} 1.598575561e+09
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="4607f294-739c-4595-8cd0-4dba40c451b0",name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_fs_type="xfs",pv_name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="pvc-retain",pvc_namespace="default",status="available",volume_type="novassd"} 1.598575561e+09
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="67653dda-d1b4-4280-92ec-1397c8a32da0",name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_fs_type="xfs",pv_name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575588e+09
@@ -161,8 +69,6 @@ kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Create
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="d553ffc0-30a7-40ed-ba79-40f21dfcaf76",name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_fs_type="xfs",pv_name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575587e+09
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.5985756e+09
 kos_cinder_volume_created_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575599e+09
-# HELP kos_cinder_volume_size Cinder volume size
-# TYPE kos_cinder_volume_size gauge
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="available",volume_type="novassd"} 1
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="4607f294-739c-4595-8cd0-4dba40c451b0",name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_fs_type="xfs",pv_name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="pvc-retain",pvc_namespace="default",status="available",volume_type="novassd"} 1
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="67653dda-d1b4-4280-92ec-1397c8a32da0",name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_fs_type="xfs",pv_name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1
@@ -171,8 +77,6 @@ kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by O
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="d553ffc0-30a7-40ed-ba79-40f21dfcaf76",name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_fs_type="xfs",pv_name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1
 kos_cinder_volume_size{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1
-# HELP kos_cinder_volume_status Cinder volume status
-# TYPE kos_cinder_volume_status gauge
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="attaching",volume_type="novassd"} 0
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="available",volume_type="novassd"} 1
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="awaiting-transfer",volume_type="novassd"} 0
@@ -349,8 +253,6 @@ kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="restoring-backup",volume_type="novassd"} 0
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="retyping",volume_type="novassd"} 0
 kos_cinder_volume_status{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="uploading",volume_type="novassd"} 0
-# HELP kos_cinder_volume_updated_at Cinder volume updated at
-# TYPE kos_cinder_volume_updated_at gauge
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="25fe54b8-ea60-4b7f-9529-4757089f2814",name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_fs_type="xfs",pv_name="pvc-b9465fd3-dd4c-4e7a-afd4-300a721e583e",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="pvc",pvc_namespace="default",status="available",volume_type="novassd"} 1.598575573e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="4607f294-739c-4595-8cd0-4dba40c451b0",name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_fs_type="xfs",pv_name="pvc-38e1097c-b020-4773-bd72-3102ea703653",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="pvc-retain",pvc_namespace="default",status="available",volume_type="novassd"} 1.598575573e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="67653dda-d1b4-4280-92ec-1397c8a32da0",name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_fs_type="xfs",pv_name="pvc-6993c3ad-34fa-43d0-9556-1465a0ba72b9",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575596e+09
@@ -359,11 +261,7 @@ kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Create
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="d553ffc0-30a7-40ed-ba79-40f21dfcaf76",name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_fs_type="xfs",pv_name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575594e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575608e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575606e+09
-# HELP kos_loadbalancer_admin_state_up Load balancer status
-# TYPE kos_loadbalancer_admin_state_up gauge
 kos_loadbalancer_admin_state_up{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",vip_address="10.6.0.8"} 1
-# HELP kos_loadbalancer_provisioning_status Load balancer status
-# TYPE kos_loadbalancer_provisioning_status gauge
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ACTIVE",vip_address="10.6.0.8"} 1
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ALLOCATED",vip_address="10.6.0.8"} 0
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="BOOTING",vip_address="10.6.0.8"} 0
@@ -373,57 +271,76 @@ kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",p
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="PENDING_DELETE",vip_address="10.6.0.8"} 0
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="PENDING_UPDATE",vip_address="10.6.0.8"} 0
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="READY",vip_address="10.6.0.8"} 0
-# HELP kos_neutron_floating_ip_status Neutron floating ip status
-# TYPE kos_neutron_floating_ip_status gauge
 kos_neutron_floating_ip_status{fixed_ip="",floating_ip="172.17.0.161",id="aa8ae8f5-fd6e-49fc-a755-93cccc74ae11",port_id=""} 1
 kos_neutron_floating_ip_status{fixed_ip="",floating_ip="172.17.0.174",id="ed22b15f-05fd-401d-8bb1-9745c7b8e93d",port_id=""} 1
 kos_neutron_floating_ip_status{fixed_ip="10.6.0.8",floating_ip="172.17.0.173",id="81a46647-ff4e-4697-9162-f802a15e88a5",port_id="10902a71-299d-4666-b086-1a0725288dac"} 1
-# HELP kos_neutron_floatingip_created_at Neutron floating ip created at
-# TYPE kos_neutron_floatingip_created_at gauge
 kos_neutron_floatingip_created_at{fixed_ip="",floating_ip="172.17.0.161",id="aa8ae8f5-fd6e-49fc-a755-93cccc74ae11",port_id=""} 1.598578483e+09
 kos_neutron_floatingip_created_at{fixed_ip="",floating_ip="172.17.0.174",id="ed22b15f-05fd-401d-8bb1-9745c7b8e93d",port_id=""} 1.598574125e+09
 kos_neutron_floatingip_created_at{fixed_ip="10.6.0.8",floating_ip="172.17.0.173",id="81a46647-ff4e-4697-9162-f802a15e88a5",port_id="10902a71-299d-4666-b086-1a0725288dac"} 1.5985741e+09
-# HELP kos_neutron_floatingip_updated_at Neutron floating ip updated at
-# TYPE kos_neutron_floatingip_updated_at gauge
 kos_neutron_floatingip_updated_at{fixed_ip="",floating_ip="172.17.0.161",id="aa8ae8f5-fd6e-49fc-a755-93cccc74ae11",port_id=""} 1.598578483e+09
 kos_neutron_floatingip_updated_at{fixed_ip="",floating_ip="172.17.0.174",id="ed22b15f-05fd-401d-8bb1-9745c7b8e93d",port_id=""} 1.598574125e+09
 kos_neutron_floatingip_updated_at{fixed_ip="10.6.0.8",floating_ip="172.17.0.173",id="81a46647-ff4e-4697-9162-f802a15e88a5",port_id="10902a71-299d-4666-b086-1a0725288dac"} 1.5985741e+09
-# HELP kos_scrape_duration Time in seconds needed for the last scrape
-# TYPE kos_scrape_duration gauge
-kos_scrape_duration{refresh_interval="120"} 2.196621759
-# HELP kos_scrape_status_succeeded Scrape status succeeded
-# TYPE kos_scrape_status_succeeded gauge
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.005"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.01"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.025"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.05"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.1"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.25"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="1"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="2.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="10"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="+Inf"} 1
+kos_openstack_api_request_duration_seconds_sum{request="floating_ip_list"} 0.467078935
+kos_openstack_api_request_duration_seconds_count{request="floating_ip_list"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.005"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.01"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.025"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.05"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.1"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.25"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="0.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="1"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="2.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="10"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="loadbalancer_list",le="+Inf"} 1
+kos_openstack_api_request_duration_seconds_sum{request="loadbalancer_list"} 0.107812617
+kos_openstack_api_request_duration_seconds_count{request="loadbalancer_list"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.005"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.01"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.025"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.05"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.1"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.25"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="0.5"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="1"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="2.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="10"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_list",le="+Inf"} 1
+kos_openstack_api_request_duration_seconds_sum{request="volume_list"} 0.738951285
+kos_openstack_api_request_duration_seconds_count{request="volume_list"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.005"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.01"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.025"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.05"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.1"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.25"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="0.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="1"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="2.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="10"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="+Inf"} 1
+kos_openstack_api_request_duration_seconds_sum{request="volume_quotasets_usage_get"} 0.135694331
+kos_openstack_api_request_duration_seconds_count{request="volume_quotasets_usage_get"} 1
+kos_openstack_api_requests_total{request="floating_ip_list"} 1
+kos_openstack_api_requests_total{request="loadbalancer_list"} 1
+kos_openstack_api_requests_total{request="volume_list"} 1
+kos_openstack_api_requests_total{request="volume_quotasets_usage_get"} 1
+kos_scrape_duration{refresh_interval="120"} 1.957081635
 kos_scrape_status_succeeded{refresh_interval="120"} 1
-# HELP kos_scraped_at Timestamp when last scrape started
-# TYPE kos_scraped_at gauge
-kos_scraped_at{refresh_interval="120"} 1.598623836e+09
-# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
-# TYPE process_cpu_seconds_total counter
-process_cpu_seconds_total 0.14
-# HELP process_max_fds Maximum number of open file descriptors.
-# TYPE process_max_fds gauge
-process_max_fds 1024
-# HELP process_open_fds Number of open file descriptors.
-# TYPE process_open_fds gauge
-process_open_fds 14
-# HELP process_resident_memory_bytes Resident memory size in bytes.
-# TYPE process_resident_memory_bytes gauge
-process_resident_memory_bytes 2.8987392e+07
-# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
-# TYPE process_start_time_seconds gauge
-process_start_time_seconds 1.5986238352e+09
-# HELP process_virtual_memory_bytes Virtual memory size in bytes.
-# TYPE process_virtual_memory_bytes gauge
-process_virtual_memory_bytes 1.763618816e+09
-# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
-# TYPE process_virtual_memory_max_bytes gauge
-process_virtual_memory_max_bytes -1
-# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
-# TYPE promhttp_metric_handler_requests_in_flight gauge
-promhttp_metric_handler_requests_in_flight 1
-# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
-# TYPE promhttp_metric_handler_requests_total counter
-promhttp_metric_handler_requests_total{code="200"} 4
-promhttp_metric_handler_requests_total{code="500"} 0
-promhttp_metric_handler_requests_total{code="503"} 0
+kos_scraped_at{refresh_interval="120"} 1.598625922e+09
 ```
