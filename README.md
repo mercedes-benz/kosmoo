@@ -7,6 +7,8 @@
 *Kosmoo* exposes metrics about:
 * [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) by queries to the Kubernetes API
 * [Cinder](https://docs.openstack.org/cinder/latest/) and its Disks by queries to the OpenStack API combined with data from the Kubernetes API
+* [Neutron Floating IPs](https://docs.openstack.org/api-ref/network/v2/index.html#floating-ips-floatingips)
+* [Load balancers](https://docs.openstack.org/api-ref/load-balancer/)
 
 ## Installation
 
