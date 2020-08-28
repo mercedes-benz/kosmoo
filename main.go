@@ -230,9 +230,26 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 
 	var errs []error
 	scrapeStart := time.Now()
-	if err := metrics.ScrapeCinderMetrics(provider, eo, clientset, tenantID); err != nil {
-		err := logError("scraping cinder metrics failed: %v", err)
+
+	cinderClient, neutronClient, loadbalancerClient, err := getClients(provider, eo)
+	if err != nil {
+		err := logError("creating openstack clients failed: %v", err)
 		errs = append(errs, err)
+	} else {
+		if err := metrics.ScrapeCinderMetrics(cinderClient, clientset, tenantID); err != nil {
+			err := logError("scraping cinder metrics failed: %v", err)
+			errs = append(errs, err)
+		}
+
+		if err := metrics.ScrapeNeutronMetrics(neutronClient, tenantID); err != nil {
+			err := logError("scraping neutron metrics failed: %v", err)
+			errs = append(errs, err)
+		}
+
+		if err := metrics.ScrapeLoadBalancerMetrics(loadbalancerClient, tenantID); err != nil {
+			err := logError("scraping load balancer metrics failed: %v", err)
+			errs = append(errs, err)
+		}
 	}
 
 	duration := time.Since(scrapeStart)
@@ -259,6 +276,29 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 	backoffSleep = time.Second
 
 	return nil
+}
+
+func getClients(provider *gophercloud.ProviderClient, endpointOpts gophercloud.EndpointOpts) (cinder, neutron, loadbalancer *gophercloud.ServiceClient, err error) {
+	cinderClient, err := openstack.NewBlockStorageV2(provider, endpointOpts)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("unable to get cinder client: %v", err)
+	}
+
+	neutronClient, err := openstack.NewNetworkV2(provider, endpointOpts)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("unable to get neutron client: %v", err)
+	}
+
+	if _, err := provider.EndpointLocator(gophercloud.EndpointOpts{Type: "load-balancer", Availability: gophercloud.AvailabilityPublic}); err != nil {
+		// we can use the neutron client to access lbaas because no octavia is available
+		return cinderClient, neutronClient, neutronClient, nil
+	}
+
+	loadbalancerClient, err := openstack.NewLoadBalancerV2(provider, endpointOpts)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("failed to create loadbalancer service client: %v", err)
+	}
+	return cinderClient, neutronClient, loadbalancerClient, nil
 }
 
 func min(a, b time.Duration) time.Duration {
