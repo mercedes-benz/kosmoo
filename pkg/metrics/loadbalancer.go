@@ -43,8 +43,9 @@ func registerLoadBalancerMetrics() {
 // passes the result to a scrape function.
 func ScrapeLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID string) error {
 	// first step: gather the data
+	mc := newOpenStackMetric("loadbalancer", "list")
 	pages, err := loadbalancers.List(client, loadbalancers.ListOpts{}).AllPages()
-	if err != nil {
+	if mc.Observe(err) != nil {
 		// only warn, maybe the next scrape will work.
 		klog.Warningf("Unable to scrape floating ips: %v", err)
 		return err

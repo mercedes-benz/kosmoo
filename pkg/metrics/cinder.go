@@ -107,18 +107,20 @@ func ScrapeCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernete
 	cinderVolumeAttachedAt.Reset()
 
 	// get all volumes and scrape them
+	mc := newOpenStackMetric("volume", "list")
 	pager := volumes.List(client, volumes.ListOpts{})
 	err = pager.EachPage(func(page pagination.Page) (bool, error) {
 		return scrapeVolumesPage(page, pvs)
 	})
-	if err != nil {
+	if mc.Observe(err) != nil {
 		// only warn, maybe the next scrape will work.
 		klog.Warningf("Unable to scrape volumes: %v", err)
 		return err
 	}
 
+	mc = newOpenStackMetric("volume_quotasets_usage", "get")
 	q, err := quotasets.GetUsage(client, tenantID).Extract()
-	if err != nil {
+	if mc.Observe(err) != nil {
 		// only warn, maybe the next scrape will work.
 		klog.Warningf("Unable to scrape quotas: %v", err)
 		return err
