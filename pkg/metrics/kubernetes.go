@@ -3,6 +3,7 @@
 package metrics
 
 import (
+	"context"
 	"fmt"
 
 	corev1 "k8s.io/api/core/v1"
@@ -16,7 +17,7 @@ const (
 )
 
 func getPVsByCinderID(clientset *kubernetes.Clientset) (map[string]corev1.PersistentVolume, error) {
-	pvsList, err := clientset.CoreV1().PersistentVolumes().List(metav1.ListOptions{})
+	pvsList, err := clientset.CoreV1().PersistentVolumes().List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("unable to list pvs: %s", err)
 	}
