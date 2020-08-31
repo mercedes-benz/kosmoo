@@ -6,7 +6,6 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/extensions/quotasets"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/v2/volumes"
-	"github.com/gophercloud/gophercloud/pagination"
 	"github.com/prometheus/client_golang/prometheus"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
@@ -93,12 +92,37 @@ func registerCinderMetrics() {
 // PublishCinderMetrics makes the list request to the blockstorage api and passes
 // the result to a publish function.
 func PublishCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernetes.Clientset, tenantID string) error {
+	// first step: gather the data
+
 	// get the cinder pvs to add metadata
 	pvs, err := getPVsByCinderID(clientset)
 	if err != nil {
 		return err
 	}
 
+	// get all volumes from openstack
+	mc := newOpenStackMetric("volume", "list")
+	pages, err := volumes.List(client, volumes.ListOpts{}).AllPages()
+	if mc.Observe(err) != nil {
+		// only warn, maybe the next list will work.
+		klog.Warningf("Unable to list volumes: %v", err)
+		return err
+	}
+	volumesList, err := volumes.ExtractVolumes(pages)
+	if err != nil {
+		return err
+	}
+
+	// get quotas form openstack
+	mc = newOpenStackMetric("volume_quotasets_usage", "get")
+	quotas, err := quotasets.GetUsage(client, tenantID).Extract()
+	if mc.Observe(err) != nil {
+		// only warn, maybe the next get will work.
+		klog.Warningf("Unable to get quotas: %v", err)
+		return err
+	}
+
+	// second step: reset the old metrics
 	// cinderQuotaVolumes and CinderQuotaVolumesGigabytes are not dynamic and do not need to be reset
 	cinderVolumeCreated.Reset()
 	cinderVolumeUpdatedAt.Reset()
@@ -106,26 +130,10 @@ func PublishCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernet
 	cinderVolumeSize.Reset()
 	cinderVolumeAttachedAt.Reset()
 
-	// get all volumes and publish them
-	mc := newOpenStackMetric("volume", "list")
-	pager := volumes.List(client, volumes.ListOpts{})
-	err = pager.EachPage(func(page pagination.Page) (bool, error) {
-		return publishVolumesPage(page, pvs)
-	})
-	if mc.Observe(err) != nil {
-		// only warn, maybe the next list will work.
-		klog.Warningf("Unable to list volumes: %v", err)
-		return err
-	}
+	// third step: publish the metrics
+	publishVolumes(volumesList, pvs)
 
-	mc = newOpenStackMetric("volume_quotasets_usage", "get")
-	q, err := quotasets.GetUsage(client, tenantID).Extract()
-	if mc.Observe(err) != nil {
-		// only warn, maybe the next get will work.
-		klog.Warningf("Unable to get quotas: %v", err)
-		return err
-	}
-	publishCinderQuotas(q)
+	publishCinderQuotas(quotas)
 	return nil
 }
 
@@ -142,13 +150,8 @@ func publishCinderQuotas(q quotasets.QuotaUsageSet) {
 	cinderQuotaVolumesGigabyte.WithLabelValues("allocated").Set(float64(q.Gigabytes.Allocated))
 }
 
-// publishVolumesPage iterates over a page, the result of a list request
-func publishVolumesPage(page pagination.Page, pvs map[string]corev1.PersistentVolume) (bool, error) {
-	vList, err := volumes.ExtractVolumes(page)
-	if err != nil {
-		return false, err
-	}
-
+// publishVolumes iterates over a page, the result of a list request
+func publishVolumes(vList []volumes.Volume, pvs map[string]corev1.PersistentVolume) {
 	for _, v := range vList {
 		if pv, ok := pvs[v.ID]; ok {
 			publishVolumeMetrics(v, &pv)
@@ -156,7 +159,6 @@ func publishVolumesPage(page pagination.Page, pvs map[string]corev1.PersistentVo
 			publishVolumeMetrics(v, nil)
 		}
 	}
-	return true, nil
 }
 
 // publishVolumeMetrics extracts data from a volume and exposes the metrics via prometheus
