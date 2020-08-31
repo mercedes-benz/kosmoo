@@ -45,21 +45,21 @@ func registerNeutronMetrics() {
 	prometheus.MustRegister(neutronFloatingIPUpdatedAt)
 }
 
-// ScrapeNeutronMetrics makes the list request to the neutron api and passes
-// the result to a scrape function.
-func ScrapeNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID string) error {
+// PublishNeutronMetrics makes the list request to the neutron api and passes
+// the result to a publish function.
+func PublishNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID string) error {
 	// first step: gather the data
 	mc := newOpenStackMetric("floating_ip", "list")
 	pages, err := floatingips.List(neutronClient, floatingips.ListOpts{}).AllPages()
 	if mc.Observe(err) != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape floating ips: %v", err)
+		// only warn, maybe the next list will work.
+		klog.Warningf("Unable to list floating ips: %v", err)
 		return err
 	}
 	floatingIPList, err := floatingips.ExtractFloatingIPs(pages)
 	if err != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape floating ips: %v", err)
+		// only warn, maybe the next extract will work.
+		klog.Warningf("Unable to extract floating ips: %v", err)
 		return err
 	}
 
@@ -68,14 +68,14 @@ func ScrapeNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID str
 
 	// third step: publish the metrics
 	for _, fip := range floatingIPList {
-		scrapeFloatingIPMetric(fip)
+		publishFloatingIPMetric(fip)
 	}
 
 	return nil
 }
 
-// scrapeFloatingIPMetric extracts data from a floating ip and exposes the metrics via prometheus
-func scrapeFloatingIPMetric(fip floatingips.FloatingIP) {
+// publishFloatingIPMetric extracts data from a floating ip and exposes the metrics via prometheus
+func publishFloatingIPMetric(fip floatingips.FloatingIP) {
 	labels := []string{fip.ID, fip.FloatingIP, fip.FixedIP, fip.PortID}
 
 	neutronFloatingIPStatus.WithLabelValues(labels...).Set(1)

@@ -39,21 +39,21 @@ func registerLoadBalancerMetrics() {
 	prometheus.MustRegister(loadbalancerStatus)
 }
 
-// ScrapeLoadBalancerMetrics makes the list request to the load balancer api and
-// passes the result to a scrape function.
-func ScrapeLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID string) error {
+// PublishLoadBalancerMetrics makes the list request to the load balancer api and
+// passes the result to a publish function.
+func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID string) error {
 	// first step: gather the data
 	mc := newOpenStackMetric("loadbalancer", "list")
 	pages, err := loadbalancers.List(client, loadbalancers.ListOpts{}).AllPages()
 	if mc.Observe(err) != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape floating ips: %v", err)
+		// only warn, maybe the next list will work.
+		klog.Warningf("Unable to list load balancers: %v", err)
 		return err
 	}
 	loadBalancerList, err := loadbalancers.ExtractLoadBalancers(pages)
 	if err != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape load balancers: %v", err)
+		// only warn, maybe the next publish will work.
+		klog.Warningf("Unable to extract load balancers: %v", err)
 		return err
 	}
 
@@ -62,14 +62,14 @@ func ScrapeLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID strin
 
 	// third step: publish the metrics
 	for _, lb := range loadBalancerList {
-		scrapeLoadBalancerMetric(lb)
+		publishLoadBalancerMetric(lb)
 	}
 
 	return nil
 }
 
-// scrapeLoadBalancerMetric extracts data from a floating ip and exposes the metrics via prometheus
-func scrapeLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
+// publishLoadBalancerMetric extracts data from a floating ip and exposes the metrics via prometheus
+func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
 	labels := []string{lb.ID, lb.VipAddress, lb.Provider, lb.VipPortID}
 
 	loadbalancerAdminStateUp.WithLabelValues(labels...).Set(boolFloat64(lb.AdminStateUp))

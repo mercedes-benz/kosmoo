@@ -236,17 +236,17 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 		err := logError("creating openstack clients failed: %v", err)
 		errs = append(errs, err)
 	} else {
-		if err := metrics.ScrapeCinderMetrics(cinderClient, clientset, tenantID); err != nil {
+		if err := metrics.PublishCinderMetrics(cinderClient, clientset, tenantID); err != nil {
 			err := logError("scraping cinder metrics failed: %v", err)
 			errs = append(errs, err)
 		}
 
-		if err := metrics.ScrapeNeutronMetrics(neutronClient, tenantID); err != nil {
+		if err := metrics.PublishNeutronMetrics(neutronClient, tenantID); err != nil {
 			err := logError("scraping neutron metrics failed: %v", err)
 			errs = append(errs, err)
 		}
 
-		if err := metrics.ScrapeLoadBalancerMetrics(loadbalancerClient, tenantID); err != nil {
+		if err := metrics.PublishLoadBalancerMetrics(loadbalancerClient, tenantID); err != nil {
 			err := logError("scraping load balancer metrics failed: %v", err)
 			errs = append(errs, err)
 		}
