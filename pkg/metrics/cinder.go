@@ -90,9 +90,9 @@ func registerCinderMetrics() {
 	prometheus.MustRegister(cinderVolumeAttachedAt)
 }
 
-// ScrapeCinderMetrics makes the list request to the blockstorage api and passes
-// the result to a scrape function.
-func ScrapeCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernetes.Clientset, tenantID string) error {
+// PublishCinderMetrics makes the list request to the blockstorage api and passes
+// the result to a publish function.
+func PublishCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernetes.Clientset, tenantID string) error {
 	// get the cinder pvs to add metadata
 	pvs, err := getPVsByCinderID(clientset)
 	if err != nil {
@@ -106,31 +106,31 @@ func ScrapeCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernete
 	cinderVolumeSize.Reset()
 	cinderVolumeAttachedAt.Reset()
 
-	// get all volumes and scrape them
+	// get all volumes and publish them
 	mc := newOpenStackMetric("volume", "list")
 	pager := volumes.List(client, volumes.ListOpts{})
 	err = pager.EachPage(func(page pagination.Page) (bool, error) {
-		return scrapeVolumesPage(page, pvs)
+		return publishVolumesPage(page, pvs)
 	})
 	if mc.Observe(err) != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape volumes: %v", err)
+		// only warn, maybe the next list will work.
+		klog.Warningf("Unable to list volumes: %v", err)
 		return err
 	}
 
 	mc = newOpenStackMetric("volume_quotasets_usage", "get")
 	q, err := quotasets.GetUsage(client, tenantID).Extract()
 	if mc.Observe(err) != nil {
-		// only warn, maybe the next scrape will work.
-		klog.Warningf("Unable to scrape quotas: %v", err)
+		// only warn, maybe the next get will work.
+		klog.Warningf("Unable to get quotas: %v", err)
 		return err
 	}
-	scrapeCinderQuotas(q)
+	publishCinderQuotas(q)
 	return nil
 }
 
-// scrapeCinderQuotas scrapes all cinder related quotas
-func scrapeCinderQuotas(q quotasets.QuotaUsageSet) {
+// publishCinderQuotas publishes all cinder related quotas
+func publishCinderQuotas(q quotasets.QuotaUsageSet) {
 	cinderQuotaVolumes.WithLabelValues("in-use").Set(float64(q.Volumes.InUse))
 	cinderQuotaVolumes.WithLabelValues("reserved").Set(float64(q.Volumes.Reserved))
 	cinderQuotaVolumes.WithLabelValues("limit").Set(float64(q.Volumes.Limit))
@@ -142,8 +142,8 @@ func scrapeCinderQuotas(q quotasets.QuotaUsageSet) {
 	cinderQuotaVolumesGigabyte.WithLabelValues("allocated").Set(float64(q.Gigabytes.Allocated))
 }
 
-// scrapeVolumesPage iterates over a page, the result of a list request
-func scrapeVolumesPage(page pagination.Page, pvs map[string]corev1.PersistentVolume) (bool, error) {
+// publishVolumesPage iterates over a page, the result of a list request
+func publishVolumesPage(page pagination.Page, pvs map[string]corev1.PersistentVolume) (bool, error) {
 	vList, err := volumes.ExtractVolumes(page)
 	if err != nil {
 		return false, err
@@ -151,16 +151,16 @@ func scrapeVolumesPage(page pagination.Page, pvs map[string]corev1.PersistentVol
 
 	for _, v := range vList {
 		if pv, ok := pvs[v.ID]; ok {
-			scrapeVolumeMetrics(v, &pv)
+			publishVolumeMetrics(v, &pv)
 		} else {
-			scrapeVolumeMetrics(v, nil)
+			publishVolumeMetrics(v, nil)
 		}
 	}
 	return true, nil
 }
 
-// scrapeVolumeMetrics extracts data from a volume and exposes the metrics via prometheus
-func scrapeVolumeMetrics(v volumes.Volume, pv *corev1.PersistentVolume) {
+// publishVolumeMetrics extracts data from a volume and exposes the metrics via prometheus
+func publishVolumeMetrics(v volumes.Volume, pv *corev1.PersistentVolume) {
 	labels := []string{v.ID, v.Description, v.Name, v.Status, v.AvailabilityZone, v.VolumeType}
 
 	k8sMetadata := extractK8sMetadata(pv)
