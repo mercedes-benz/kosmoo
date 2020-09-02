@@ -20,7 +20,7 @@ HEADER_WHITELIST=("./go.sum" "./LICENSE" "./kosmoo" "./logo/logo.png")
 
 all_files=()
 export IFS=$'\n'
-while IFS='' read -r line; do all_error_files+=("$line"); done < <(find . -type f -not -path './.git/*' -not -path './vendor/*' -not -path './tmp/*')
+while IFS='' read -r line; do all_error_files+=("$line"); done < <(find . -type f -not -path './.git*' -not -path './vendor/*' -not -path './tmp/*' -not -path './.idea/*')
 unset IFS
 
 errors=()
