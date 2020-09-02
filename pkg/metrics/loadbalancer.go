@@ -58,6 +58,7 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 	}
 
 	// second step: reset the old metrics
+	loadbalancerAdminStateUp.Reset()
 	loadbalancerStatus.Reset()
 
 	// third step: publish the metrics
