@@ -19,6 +19,10 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_cinder_volume_status gauge
 # HELP kos_cinder_volume_updated_at Cinder volume updated at
 # TYPE kos_cinder_volume_updated_at gauge
+# HELP kos_firewall_v1_admin_state_up Firewall v1 status
+# TYPE kos_firewall_v1_admin_state_up gauge
+# HELP kos_firewall_v1_status Firewall v1 status
+# TYPE kos_firewall_v1_status gauge
 # HELP kos_loadbalancer_admin_state_up Load balancer status
 # TYPE kos_loadbalancer_admin_state_up gauge
 # HELP kos_loadbalancer_provisioning_status Load balancer status
@@ -261,6 +265,14 @@ kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Create
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="d553ffc0-30a7-40ed-ba79-40f21dfcaf76",name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_fs_type="xfs",pv_name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575594e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575608e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575606e+09
+kos_firewall_v1_admin_state_up{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200"} 1
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="ACTIVE"} 1
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="DOWN"} 0
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="ERROR"} 0
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="INACTIVE"} 0
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_CREATE"} 0
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_DELETE"} 0
+kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_UPDATE"} 0
 kos_loadbalancer_admin_state_up{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",vip_address="10.6.0.8"} 1
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ACTIVE",vip_address="10.6.0.8"} 1
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ALLOCATED",vip_address="10.6.0.8"} 0
@@ -336,6 +348,7 @@ kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usag
 kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="+Inf"} 1
 kos_openstack_api_request_duration_seconds_sum{request="volume_quotasets_usage_get"} 0.135694331
 kos_openstack_api_request_duration_seconds_count{request="volume_quotasets_usage_get"} 1
+kos_openstack_api_requests_total{request="firewall_list"} 1
 kos_openstack_api_requests_total{request="floating_ip_list"} 1
 kos_openstack_api_requests_total{request="loadbalancer_list"} 1
 kos_openstack_api_requests_total{request="volume_list"} 1
