@@ -23,7 +23,7 @@ func registerLoadBalancerMetrics() {
 	loadbalancerAdminStateUp = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: generateName("loadbalancer_admin_state_up"),
-			Help: "Load balancer status",
+			Help: "Load balancer admin state up",
 		},
 		loadBalancerLabels,
 	)
@@ -69,7 +69,7 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 	return nil
 }
 
-// publishLoadBalancerMetric extracts data from a floating ip and exposes the metrics via prometheus
+// publishLoadBalancerMetric extracts data from a load balancer and exposes the metrics via prometheus
 func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
 	labels := []string{lb.ID, lb.VipAddress, lb.Provider, lb.VipPortID}
 

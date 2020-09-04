@@ -23,6 +23,7 @@ func RegisterMetrics(prefix string) {
 	registerLoadBalancerMetrics()
 	registerOpenStackMetrics()
 	registerFWaaSV1Metrics()
+	registerServerMetrics()
 }
 
 // AddPrefix adds the given prefix to the string, if set
