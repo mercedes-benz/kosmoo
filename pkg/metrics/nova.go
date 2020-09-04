@@ -16,7 +16,7 @@ var (
 	// possible server states, from https://github.com/openstack/nova/blob/master/nova/objects/fields.py#L949
 	states = []string{"ACTIVE", "BUILDING", "PAUSED", "SUSPENDED", "STOPPED", "RESCUED", "RESIZED", "SOFT_DELETED", "DELETED", "ERROR", "SHELVED", "SHELVED_OFFLOADED"}
 
-	serverLabels = []string{"id"}
+	serverLabels = []string{"id", "name"}
 )
 
 func registerServerMetrics() {
@@ -71,7 +71,7 @@ func PublishServerMetrics(client *gophercloud.ServiceClient, tenantID string) er
 
 // publishServerMetric extracts data from a server and exposes the metrics via prometheus
 func publishServerMetric(srv servers.Server) {
-	labels := []string{srv.ID}
+	labels := []string{srv.ID, srv.Name}
 
 	serverVolumeAttachmentCount.WithLabelValues(labels...).Set(float64(len(srv.AttachedVolumes)))
 
