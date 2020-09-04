@@ -23,7 +23,7 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_firewall_v1_admin_state_up gauge
 # HELP kos_firewall_v1_status Firewall v1 status
 # TYPE kos_firewall_v1_status gauge
-# HELP kos_loadbalancer_admin_state_up Load balancer status
+# HELP kos_loadbalancer_admin_state_up Load balancer admin state up
 # TYPE kos_loadbalancer_admin_state_up gauge
 # HELP kos_loadbalancer_provisioning_status Load balancer status
 # TYPE kos_loadbalancer_provisioning_status gauge
@@ -43,6 +43,10 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_scrape_status_succeeded gauge
 # HELP kos_scraped_at Timestamp when last scrape started
 # TYPE kos_scraped_at gauge
+# HELP kos_server_status Server status
+# TYPE kos_server_status gauge
+# HELP kos_server_volume_attachment_count Server volume attachment count
+# TYPE kos_server_volume_attachment_count gauge
 ```
 
 # Example Metrics
@@ -356,4 +360,56 @@ kos_openstack_api_requests_total{request="volume_quotasets_usage_get"} 1
 kos_scrape_duration{refresh_interval="120"} 1.957081635
 kos_scrape_status_succeeded{refresh_interval="120"} 1
 kos_scraped_at{refresh_interval="120"} 1.598625922e+09
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="ACTIVE"} 1
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="BUILDING"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="DELETED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="ERROR"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="PAUSED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="RESCUED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="RESIZED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="SHELVED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="SHELVED_OFFLOADED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="SOFT_DELETED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="STOPPED"} 0
+kos_server_status{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",status="SUSPENDED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="ACTIVE"} 1
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="BUILDING"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="DELETED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="ERROR"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="PAUSED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="RESCUED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="RESIZED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="SHELVED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="SHELVED_OFFLOADED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="SOFT_DELETED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="STOPPED"} 0
+kos_server_status{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",status="SUSPENDED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="ACTIVE"} 1
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="BUILDING"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="DELETED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="ERROR"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="PAUSED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="RESCUED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="RESIZED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="SHELVED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="SHELVED_OFFLOADED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="SOFT_DELETED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="STOPPED"} 0
+kos_server_status{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",status="SUSPENDED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="ACTIVE"} 1
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="BUILDING"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="DELETED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="ERROR"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="PAUSED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="RESCUED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="RESIZED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SHELVED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SHELVED_OFFLOADED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SOFT_DELETED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="STOPPED"} 0
+kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SUSPENDED"} 0
+kos_server_volume_attachment_count{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01"} 2
+kos_server_volume_attachment_count{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02"} 2
+kos_server_volume_attachment_count{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03"} 2
+kos_server_volume_attachment_count{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01"} 0
 ```
