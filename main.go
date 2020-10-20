@@ -14,7 +14,6 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
-	"github.com/gophercloud/gophercloud/openstack/compute/v2/extensions"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gopkg.in/ini.v1"
@@ -257,17 +256,9 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 			errs = append(errs, err)
 		}
 
-		// check if Neutron is using FWaaS v1
-		// if FWaaS v2 is enabled, the extension alias is fwaas_v2 (the directories are the extension names)
-		// https://godoc.org/github.com/gophercloud/gophercloud/acceptance/openstack/networking/v2/extensions
-		fwaasV1Extension := extensions.Get(neutronClient, "fwaas")
-		if fwaasV1Extension.Body != nil {
-			if err := metrics.PublishFirewallMetrics(neutronClient, tenantID); err != nil {
-				err := logError("scraping firewall metrics failed: %v", err)
-				errs = append(errs, err)
-			}
-		} else {
-			klog.Info("skipping Firewall metrics as FWaaS v1 is not enabled")
+		if err := metrics.PublishFirewallV1Metrics(neutronClient, tenantID); err != nil {
+			err := logError("scraping firewall v1 metrics failed: %v", err)
+			errs = append(errs, err)
 		}
 	}
 
