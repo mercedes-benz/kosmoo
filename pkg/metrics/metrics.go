@@ -23,6 +23,7 @@ func RegisterMetrics(prefix string) {
 	registerLoadBalancerMetrics()
 	registerOpenStackMetrics()
 	registerFWaaSV1Metrics()
+	registerFWaaSV2Metrics()
 	registerServerMetrics()
 }
 
