@@ -41,19 +41,19 @@ func registerFWaaSV2Metrics() {
 	prometheus.MustRegister(firewallV2GroupStatus)
 }
 
-// PublishFirewallV1Metrics makes the list request to the firewall api and
+// PublishFirewallV2Metrics makes the list request to the firewall api and
 // passes the result to a publish function. It only does that when the extension
 // is available in neutron.
 func PublishFirewallV2Metrics(client *gophercloud.ServiceClient, tenantID string) error {
-	// check if Neutron extenstion FWaaS v1 is available.
-	fwaasV1Extension := extensions.Get(client, "fwaas_v2")
-	if fwaasV1Extension.Body != nil {
+	// check if Neutron extenstion FWaaS v2 is available.
+	fwaasV2Extension := extensions.Get(client, "fwaas_v2")
+	if fwaasV2Extension.Body != nil {
 		return publishFirewallV2Metrics(client, tenantID)
 	}
 
-	// reset metrics if fwaas v1 is not available to not publish them anymore
+	// reset metrics if fwaas v2 is not available to not publish them anymore
 	resetFirewallV2Metrics()
-	klog.Info("skipping Firewall metrics as FWaaS v1 is not enabled")
+	klog.Info("skipping Firewall metrics as FWaaS v2 is not enabled")
 	return nil
 }
 
@@ -87,7 +87,7 @@ func publishFirewallV2Metrics(client *gophercloud.ServiceClient, tenantID string
 	return nil
 }
 
-// resetFirewallV2Metrics resets the firewall v1 metrics
+// resetFirewallV2Metrics resets the firewall v2 metrics
 func resetFirewallV2Metrics() {
 	firewallV2GroupAdminStateUp.Reset()
 	firewallV2GroupStatus.Reset()
