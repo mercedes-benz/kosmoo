@@ -23,6 +23,10 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_firewall_v1_admin_state_up gauge
 # HELP kos_firewall_v1_status Firewall v1 status
 # TYPE kos_firewall_v1_status gauge
+# HELP kos_firewall_v2_group_admin_state_up Firewall v2 status
+# TYPE kos_firewall_v2_group_admin_state_up gauge
+# HELP kos_firewall_v2_group_status Firewall v2 status
+# TYPE kos_firewall_v2_group_status gauge
 # HELP kos_loadbalancer_admin_state_up Load balancer admin state up
 # TYPE kos_loadbalancer_admin_state_up gauge
 # HELP kos_loadbalancer_provisioning_status Load balancer status
@@ -277,6 +281,14 @@ kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",
 kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_CREATE"} 0
 kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_DELETE"} 0
 kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="PENDING_UPDATE"} 0
+kos_firewall_v2_group_admin_state_up{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f"} 1
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="ACTIVE"} 1
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="DOWN"} 0
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="ERROR"} 0
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="INACTIVE"} 0
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="PENDING_CREATE"} 0
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="PENDING_DELETE"} 0
+kos_firewall_v2_group_status{description="",egressPolicyID="cbb204f5-3a92-427f-b082-c34a004856df",id="f4d10c07-4b29-4b91-a57c-7a4762634f90",ingressPolicyID="ca06e59e-5d49-4944-80a6-f14e01edc01c",name="my-firewall",projectID="1b08db53fdec4c498a15ad7d027eac4f",status="PENDING_UPDATE"} 0
 kos_loadbalancer_admin_state_up{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",vip_address="10.6.0.8"} 1
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ACTIVE",vip_address="10.6.0.8"} 1
 kos_loadbalancer_provisioning_status{id="059e7a29-5229-409e-870d-6ceb9c1059a9",port_id="10902a71-299d-4666-b086-1a0725288dac",provider="vmwareedge",provisioning_status="ALLOCATED",vip_address="10.6.0.8"} 0
@@ -352,6 +364,21 @@ kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usag
 kos_openstack_api_request_duration_seconds_bucket{request="volume_quotasets_usage_get",le="+Inf"} 1
 kos_openstack_api_request_duration_seconds_sum{request="volume_quotasets_usage_get"} 0.135694331
 kos_openstack_api_request_duration_seconds_count{request="volume_quotasets_usage_get"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.005"} 0                                
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.01"} 0                                 
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.025"} 0                                
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.05"} 0                                 
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.1"} 1                                  
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.25"} 1                                 
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="0.5"} 1                                  
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="1"} 1                                    
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="2.5"} 1                                  
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="5"} 1                                    
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="10"} 1                                   
+kos_openstack_api_request_duration_seconds_bucket{request="firewallv2_group_list",le="+Inf"} 1                                 
+kos_openstack_api_request_duration_seconds_sum{request="firewallv2_group_list"} 0.061682213                                    
+kos_openstack_api_request_duration_seconds_count{request="firewallv2_group_list"} 1                                            
+kos_openstack_api_requests_total{request="firewallv2_group_list"} 1                                                            
 kos_openstack_api_requests_total{request="firewall_list"} 1
 kos_openstack_api_requests_total{request="floating_ip_list"} 1
 kos_openstack_api_requests_total{request="loadbalancer_list"} 1
