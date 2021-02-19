@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: MIT --->
-# SecHub Maintainers
+# Kosmoo Maintainers
 
 ## Maintainers
 
