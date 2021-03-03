@@ -16,7 +16,7 @@ var (
 	// possible load balancer provisioning states, from https://github.com/openstack/octavia-lib/blob/fe022cdf14604206af783c8a0887c008c48fd053/octavia_lib/common/constants.py#L169
 	provisioningStates = []string{"ALLOCATED", "BOOTING", "READY", "ACTIVE", "PENDING_DELETE", "PENDING_UPDATE", "PENDING_CREATE", "DELETED", "ERROR"}
 
-	loadBalancerLabels = []string{"id", "vip_address", "provider", "port_id"}
+	loadBalancerLabels = []string{"id", "name", "vip_address", "provider", "port_id"}
 )
 
 func registerLoadBalancerMetrics() {
@@ -71,7 +71,7 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 
 // publishLoadBalancerMetric extracts data from a load balancer and exposes the metrics via prometheus
 func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
-	labels := []string{lb.ID, lb.VipAddress, lb.Provider, lb.VipPortID}
+	labels := []string{lb.ID, lb.Name, lb.VipAddress, lb.Provider, lb.VipPortID}
 
 	loadbalancerAdminStateUp.WithLabelValues(labels...).Set(boolFloat64(lb.AdminStateUp))
 
