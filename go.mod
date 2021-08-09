@@ -12,7 +12,7 @@ require (
 	github.com/prometheus/common v0.13.0 // indirect
 	github.com/smartystreets/assertions v1.0.1 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
-	gopkg.in/ini.v1 v1.60.2
+	gopkg.in/ini.v1 v1.62.0
 	k8s.io/api v0.22.0
 	k8s.io/apimachinery v0.22.0
 	k8s.io/client-go v0.22.0
