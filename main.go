@@ -19,7 +19,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 var (
@@ -36,9 +36,11 @@ var (
 	scrapedStatus  *prometheus.GaugeVec
 )
 
-var clientset *kubernetes.Clientset
-var backoffSleep = time.Second
-var maxBackoffSleep = time.Hour
+var (
+	clientset       *kubernetes.Clientset
+	backoffSleep    = time.Second
+	maxBackoffSleep = time.Hour
+)
 
 func registerMetrics(prefix string) {
 	scrapeDuration = prometheus.NewGaugeVec(
@@ -194,7 +196,6 @@ func run() error {
 
 // authOptsFromCloudConf reads the cloud.conf from `path` and returns the read AuthOptions
 func authOptsFromCloudConf(path string) (gophercloud.AuthOptions, gophercloud.EndpointOpts, error) {
-
 	cfg, err := ini.Load(path)
 	if err != nil {
 		return gophercloud.AuthOptions{}, gophercloud.EndpointOpts{}, fmt.Errorf("unable to read cloud.conf content: %v", err)
