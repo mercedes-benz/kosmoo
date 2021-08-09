@@ -32,13 +32,10 @@ push:
 fmt:
 	@gofmt -l -w $(SRCS)
 
-test: vet fmtcheck spdxcheck lint
+test: vet fmtcheck spdxcheck
 
 vet:
 	go vet ./...
-
-lint:
-	@hack/check_golangci-lint.sh
 
 fmtcheck:
 	@gofmt -l -s $(SRCS) | read; if [ $$? == 0 ]; then echo "gofmt check failed for:"; gofmt -l -s $(SRCS); exit 1; fi
