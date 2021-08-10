@@ -16,10 +16,10 @@ if ! [ -x "$(command -v golangci-lint-${GOLANGCILINT_VERSION})" ]; then
 
   wget -q "${GOLANGCILINT_URL}"
   tar -xf "${GOLANGCILINT_FILENAME}"
-
+  
   mkdir -p "${TMP_BIN}"
   mv "${GOLANGCILINT_FILENAME%.tar.gz}/golangci-lint" "${TMP_BIN}/golangci-lint-${GOLANGCILINT_VERSION}"
-
+  
   rm -rf "${GOLANGCILINT_FILENAME%.tar.gz}" "${GOLANGCILINT_FILENAME}"
   # popd
 fi
