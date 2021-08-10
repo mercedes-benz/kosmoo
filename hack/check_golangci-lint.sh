@@ -3,7 +3,7 @@
 
 set -e
 
-GOLANGCILINT_VERSION="1.30.0"
+GOLANGCILINT_VERSION="1.41.1"
 GOLANGCILINT_FILENAME="golangci-lint-${GOLANGCILINT_VERSION}-linux-amd64.tar.gz"
 GOLANGCILINT_URL="https://github.com/golangci/golangci-lint/releases/download/v${GOLANGCILINT_VERSION}/${GOLANGCILINT_FILENAME}"
 
@@ -16,10 +16,10 @@ if ! [ -x "$(command -v golangci-lint-${GOLANGCILINT_VERSION})" ]; then
 
   wget -q "${GOLANGCILINT_URL}"
   tar -xf "${GOLANGCILINT_FILENAME}"
-  
+ 
   mkdir -p "${TMP_BIN}"
   mv "${GOLANGCILINT_FILENAME%.tar.gz}/golangci-lint" "${TMP_BIN}/golangci-lint-${GOLANGCILINT_VERSION}"
-  
+ 
   rm -rf "${GOLANGCILINT_FILENAME%.tar.gz}" "${GOLANGCILINT_FILENAME}"
   # popd
 fi
