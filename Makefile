@@ -32,7 +32,7 @@ push:
 fmt:
 	@gofmt -l -w $(SRCS)
 
-test: vet fmtcheck spdxcheck lint
+test: vet fmtcheck spdxcheck
 
 vet:
 	go vet ./...
