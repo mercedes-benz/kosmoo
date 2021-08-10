@@ -7,7 +7,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/common/extensions"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/fwaas_v2/groups"
 	"github.com/prometheus/client_golang/prometheus"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 var (

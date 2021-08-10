@@ -6,7 +6,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/layer3/floatingips"
 	"github.com/prometheus/client_golang/prometheus"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 )
 
 var (
