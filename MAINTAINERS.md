@@ -13,6 +13,3 @@
 | Maintainer | GitHub ID | Affiliation | Left |
 |------------|-----------|-------------|------|
 | Stefan Büringer     | <stefan.bueringer@daimler.com>    | [sbueringer](https://github.com/sbueringer) | Daimler TSS GmbH, [imprint](https://github.com/Daimler/daimler-foss/blob/master/LEGAL_IMPRINT.md) | 2021-06-30 |
-
-*(None at the moment)*
-
