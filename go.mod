@@ -9,7 +9,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	gopkg.in/ini.v1 v1.63.0
 	k8s.io/api v0.22.1
-	k8s.io/apimachinery v0.22.1
+	k8s.io/apimachinery v0.22.2
 	k8s.io/client-go v0.22.1
 	k8s.io/klog/v2 v2.10.0
 )
