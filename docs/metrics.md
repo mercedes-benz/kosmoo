@@ -49,6 +49,8 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_scraped_at gauge
 # HELP kos_server_status Server status
 # TYPE kos_server_status gauge
+# HELP kos_server_volume_attachment Server volume attachment
+# TYPE kos_server_volume_attachment gauge
 # HELP kos_server_volume_attachment_count Server volume attachment count
 # TYPE kos_server_volume_attachment_count gauge
 ```
@@ -435,6 +437,12 @@ kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-maste
 kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SOFT_DELETED"} 0
 kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="STOPPED"} 0
 kos_server_status{id="f98bccd0-8627-4075-9d31-e6fc9ea99ce3",name="k8s-kube-master01",status="SUSPENDED"} 0
+kos_server_volume_attachment{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",volume_id="b3d989e7-3f28-4224-bc30-62c198bf56d0"} 1
+kos_server_volume_attachment{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01",volume_id="f37d89a4-a8fd-46bb-9c08-fba5b3e22398"} 1
+kos_server_volume_attachment{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",volume_id="726ca281-e21c-41c2-ab2e-bb44c2894db1"} 1
+kos_server_volume_attachment{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02",volume_id="9806bff3-86f9-402b-98f6-70af7fe524f1"} 1
+kos_server_volume_attachment{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",volume_id="9b672d6a-8231-4b10-90a4-90e481bf31d4"} 1
+kos_server_volume_attachment{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03",volume_id="7f6d127f-5e53-41db-b710-57515bfe61ee"} 1
 kos_server_volume_attachment_count{id="5e10188d-214d-4949-857c-171c83b80ad6",name="k8s-kube-node01"} 2
 kos_server_volume_attachment_count{id="a373e367-c661-454c-83c9-3f9186c7a55a",name="k8s-kube-node02"} 2
 kos_server_volume_attachment_count{id="c20db019-dff7-457f-9076-943a669cd464",name="k8s-kube-node03"} 2

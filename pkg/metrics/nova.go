@@ -12,6 +12,7 @@ import (
 var (
 	serverStatus                *prometheus.GaugeVec
 	serverVolumeAttachmentCount *prometheus.GaugeVec
+	serverVolumeAttachment      *prometheus.GaugeVec
 
 	// possible server states, from https://github.com/openstack/nova/blob/master/nova/objects/fields.py#L949
 	states = []string{"ACTIVE", "BUILDING", "PAUSED", "SUSPENDED", "STOPPED", "RESCUED", "RESIZED", "SOFT_DELETED", "DELETED", "ERROR", "SHELVED", "SHELVED_OFFLOADED"}
@@ -34,9 +35,17 @@ func registerServerMetrics() {
 		},
 		serverLabels,
 	)
+	serverVolumeAttachment = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("server_volume_attachment"),
+			Help: "Server volume attachment",
+		},
+		append(serverLabels, "volume_id"),
+	)
 
 	prometheus.MustRegister(serverStatus)
 	prometheus.MustRegister(serverVolumeAttachmentCount)
+	prometheus.MustRegister(serverVolumeAttachment)
 }
 
 // PublishServerMetrics makes the list request to the server api and
@@ -60,6 +69,7 @@ func PublishServerMetrics(client *gophercloud.ServiceClient, tenantID string) er
 	// second step: reset the old metrics
 	serverStatus.Reset()
 	serverVolumeAttachmentCount.Reset()
+	serverVolumeAttachment.Reset()
 
 	// third step: publish the metrics
 	for _, srv := range serversList {
@@ -74,6 +84,9 @@ func publishServerMetric(srv servers.Server) {
 	labels := []string{srv.ID, srv.Name}
 
 	serverVolumeAttachmentCount.WithLabelValues(labels...).Set(float64(len(srv.AttachedVolumes)))
+	for _, attachedVolumeID := range srv.AttachedVolumes {
+		serverVolumeAttachment.WithLabelValues(append(labels, attachedVolumeID.ID)...).Set(1)
+	}
 
 	// create one metric per status
 	for _, state := range states {
