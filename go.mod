@@ -6,7 +6,7 @@ go 1.12
 require (
 	github.com/gophercloud/gophercloud v0.22.0
 	github.com/prometheus/client_golang v1.11.0
-	gopkg.in/ini.v1 v1.63.2
+	gopkg.in/ini.v1 v1.64.0
 	k8s.io/api v0.22.2
 	k8s.io/apimachinery v0.22.2
 	k8s.io/client-go v0.22.2
