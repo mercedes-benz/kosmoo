@@ -7,8 +7,8 @@ require (
 	github.com/gophercloud/gophercloud v0.22.0
 	github.com/prometheus/client_golang v1.11.0
 	gopkg.in/ini.v1 v1.63.2
-	k8s.io/api v0.22.2
-	k8s.io/apimachinery v0.22.2
-	k8s.io/client-go v0.22.2
-	k8s.io/klog/v2 v2.20.0
+	k8s.io/api v0.23.1
+	k8s.io/apimachinery v0.23.1
+	k8s.io/client-go v0.23.1
+	k8s.io/klog/v2 v2.30.0
 )
