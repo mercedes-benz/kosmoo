@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-FROM alpine:3.14.2
+FROM alpine:3.15.1
 
 LABEL description="Kosmoo"
 
