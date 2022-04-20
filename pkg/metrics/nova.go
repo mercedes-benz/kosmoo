@@ -113,7 +113,7 @@ func PublishServerMetrics(client *gophercloud.ServiceClient, tenantID string) er
 		publishServerMetric(srv)
 	}
 
-	// get compute quotas form openstack
+	// Get compute quotas from OpenStack.
 	mc = newOpenStackMetric("compute_quotasets_detail", "get")
 	quotas, err := quotasets.GetDetail(client, tenantID).Extract()
 	if mc.Observe(err) != nil {
