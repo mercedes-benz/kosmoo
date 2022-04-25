@@ -118,7 +118,7 @@ func PublishCinderMetrics(client *gophercloud.ServiceClient, clientset *kubernet
 	quotas, err := quotasets.GetUsage(client, tenantID).Extract()
 	if mc.Observe(err) != nil {
 		// only warn, maybe the next get will work.
-		klog.Warningf("Unable to get quotas: %v", err)
+		klog.Warningf("Unable to get volume quotas: %v", err)
 		return err
 	}
 

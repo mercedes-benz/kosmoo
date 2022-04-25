@@ -4,15 +4,20 @@ package metrics
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/quotasets"
 	"github.com/gophercloud/gophercloud/openstack/compute/v2/servers"
 	"github.com/prometheus/client_golang/prometheus"
 	"k8s.io/klog/v2"
 )
 
 var (
+	computeQuotaCores           *prometheus.GaugeVec
+	computeQuotaFloatingIPs     *prometheus.GaugeVec
+	computeQuotaInstances       *prometheus.GaugeVec
+	computeQuotaRAM             *prometheus.GaugeVec
 	serverStatus                *prometheus.GaugeVec
-	serverVolumeAttachmentCount *prometheus.GaugeVec
 	serverVolumeAttachment      *prometheus.GaugeVec
+	serverVolumeAttachmentCount *prometheus.GaugeVec
 
 	// possible server states, from https://github.com/openstack/nova/blob/master/nova/objects/fields.py#L949
 	states = []string{"ACTIVE", "BUILDING", "PAUSED", "SUSPENDED", "STOPPED", "RESCUED", "RESIZED", "SOFT_DELETED", "DELETED", "ERROR", "SHELVED", "SHELVED_OFFLOADED"}
@@ -21,6 +26,34 @@ var (
 )
 
 func registerServerMetrics() {
+	computeQuotaCores = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("compute_quota_cores"),
+			Help: "Number of instance cores allowed",
+		},
+		[]string{"quota_type"},
+	)
+	computeQuotaFloatingIPs = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("compute_quota_floating_ips"),
+			Help: "Number of floating IPs allowed",
+		},
+		[]string{"quota_type"},
+	)
+	computeQuotaInstances = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("compute_quota_instances"),
+			Help: "Number of instances (servers) allowed",
+		},
+		[]string{"quota_type"},
+	)
+	computeQuotaRAM = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("compute_quota_ram_megabytes"),
+			Help: "RAM (in MB) allowed",
+		},
+		[]string{"quota_type"},
+	)
 	serverStatus = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: generateName("server_status"),
@@ -43,6 +76,10 @@ func registerServerMetrics() {
 		append(serverLabels, "volume_id"),
 	)
 
+	prometheus.MustRegister(computeQuotaCores)
+	prometheus.MustRegister(computeQuotaFloatingIPs)
+	prometheus.MustRegister(computeQuotaInstances)
+	prometheus.MustRegister(computeQuotaRAM)
 	prometheus.MustRegister(serverStatus)
 	prometheus.MustRegister(serverVolumeAttachmentCount)
 	prometheus.MustRegister(serverVolumeAttachment)
@@ -76,6 +113,16 @@ func PublishServerMetrics(client *gophercloud.ServiceClient, tenantID string) er
 		publishServerMetric(srv)
 	}
 
+	// Get compute quotas from OpenStack.
+	mc = newOpenStackMetric("compute_quotasets_detail", "get")
+	quotas, err := quotasets.GetDetail(client, tenantID).Extract()
+	if mc.Observe(err) != nil {
+		// only warn, maybe the next get will work.
+		klog.Warningf("Unable to get compute quotas: %v", err)
+		return err
+	}
+	publishComputeQuotaMetrics(quotas)
+
 	return nil
 }
 
@@ -93,4 +140,23 @@ func publishServerMetric(srv servers.Server) {
 		stateLabels := append(labels, state)
 		serverStatus.WithLabelValues(stateLabels...).Set(boolFloat64(srv.Status == state))
 	}
+}
+
+// publishComputeQuotaMetrics publishes all compute related quotas
+func publishComputeQuotaMetrics(q quotasets.QuotaDetailSet) {
+	computeQuotaCores.WithLabelValues("in-use").Set(float64(q.Cores.InUse))
+	computeQuotaCores.WithLabelValues("reserved").Set(float64(q.Cores.Reserved))
+	computeQuotaCores.WithLabelValues("limit").Set(float64(q.Cores.Limit))
+
+	computeQuotaFloatingIPs.WithLabelValues("in-use").Set(float64(q.FloatingIPs.InUse))
+	computeQuotaFloatingIPs.WithLabelValues("reserved").Set(float64(q.FloatingIPs.Reserved))
+	computeQuotaFloatingIPs.WithLabelValues("limit").Set(float64(q.FloatingIPs.Limit))
+
+	computeQuotaInstances.WithLabelValues("in-use").Set(float64(q.Instances.InUse))
+	computeQuotaInstances.WithLabelValues("reserved").Set(float64(q.Instances.Reserved))
+	computeQuotaInstances.WithLabelValues("limit").Set(float64(q.Instances.Limit))
+
+	computeQuotaRAM.WithLabelValues("in-use").Set(float64(q.RAM.InUse))
+	computeQuotaRAM.WithLabelValues("reserved").Set(float64(q.RAM.Reserved))
+	computeQuotaRAM.WithLabelValues("limit").Set(float64(q.RAM.Limit))
 }
