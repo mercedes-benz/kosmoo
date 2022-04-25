@@ -19,6 +19,14 @@ As addition to the following metrics the exporter exposes some basic `go_*`, `pr
 # TYPE kos_cinder_volume_status gauge
 # HELP kos_cinder_volume_updated_at Cinder volume updated at
 # TYPE kos_cinder_volume_updated_at gauge
+# HELP kos_compute_quota_cores Number of instance cores allowed
+# TYPE kos_compute_quota_cores gauge
+# HELP kos_compute_quota_floating_ips Number of floating IPs allowed
+# TYPE kos_compute_quota_floating_ips gauge
+# HELP kos_compute_quota_instances Number of instances (servers) allowed
+# TYPE kos_compute_quota_instances gauge
+# HELP kos_compute_quota_ram_megabytes RAM (in MB) allowed
+# TYPE kos_compute_quota_ram_megabytes gauge
 # HELP kos_firewall_v1_admin_state_up Firewall v1 status
 # TYPE kos_firewall_v1_admin_state_up gauge
 # HELP kos_firewall_v1_status Firewall v1 status
@@ -275,6 +283,18 @@ kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Create
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="d553ffc0-30a7-40ed-ba79-40f21dfcaf76",name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_fs_type="xfs",pv_name="pvc-d05b7c8b-231e-47ef-99d4-d8f0a2bc58d4",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-1",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575594e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="e010c879-0b53-4204-a723-1b26a8ad5e3f",name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_fs_type="xfs",pv_name="pvc-6fe7433a-5205-4b8b-acff-e17416a98515",pv_reclaim_policy="Delete",pv_storage_class="cinder",pvc_name="vol-sts-pvc-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575608e+09
 kos_cinder_volume_updated_at{cinder_availability_zone="nova",description="Created by OpenStack Cinder CSI driver",id="fd2de264-1a01-44e5-88ed-a63f26336142",name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_fs_type="xfs",pv_name="pvc-d6fc37f5-b3ef-4ef9-abf7-ef0391262f12",pv_reclaim_policy="Retain",pv_storage_class="cinder-retain",pvc_name="vol-sts-pvc-retain-2",pvc_namespace="default",status="in-use",volume_type="novassd"} 1.598575606e+09
+kos_compute_quota_cores{quota_type="in-use"} 0
+kos_compute_quota_cores{quota_type="limit"} 80
+kos_compute_quota_cores{quota_type="reserved"} 0
+kos_compute_quota_floating_ips{quota_type="in-use"} 0
+kos_compute_quota_floating_ips{quota_type="limit"} 10
+kos_compute_quota_floating_ips{quota_type="reserved"} 0
+kos_compute_quota_instances{quota_type="in-use"} 0
+kos_compute_quota_instances{quota_type="limit"} 40
+kos_compute_quota_instances{quota_type="reserved"} 0
+kos_compute_quota_ram_megabytes{quota_type="in-use"} 0
+kos_compute_quota_ram_megabytes{quota_type="limit"} 512000
+kos_compute_quota_ram_megabytes{quota_type="reserved"} 0
 kos_firewall_v1_admin_state_up{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200"} 1
 kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="ACTIVE"} 1
 kos_firewall_v1_status{description="",id="cb4a31f4-f20f-4a67-9945-21ba0c5a3d21",name="my-firewall",policyID="fc73d805-324b-4415-92ae-b8a4c4232abe",projectID="5af4393c0a4b4eb98b2c0b61393f1200",status="DOWN"} 0
@@ -310,6 +330,20 @@ kos_neutron_floatingip_created_at{fixed_ip="10.6.0.8",floating_ip="172.17.0.173"
 kos_neutron_floatingip_updated_at{fixed_ip="",floating_ip="172.17.0.161",id="aa8ae8f5-fd6e-49fc-a755-93cccc74ae11",port_id=""} 1.598578483e+09
 kos_neutron_floatingip_updated_at{fixed_ip="",floating_ip="172.17.0.174",id="ed22b15f-05fd-401d-8bb1-9745c7b8e93d",port_id=""} 1.598574125e+09
 kos_neutron_floatingip_updated_at{fixed_ip="10.6.0.8",floating_ip="172.17.0.173",id="81a46647-ff4e-4697-9162-f802a15e88a5",port_id="10902a71-299d-4666-b086-1a0725288dac"} 1.5985741e+09
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.005"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.01"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.025"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.05"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.1"} 0
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.25"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="0.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="1"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="2.5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="5"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="10"} 1
+kos_openstack_api_request_duration_seconds_bucket{request="compute_quotasets_detail_get",le="+Inf"} 1
+kos_openstack_api_request_duration_seconds_sum{request="compute_quotasets_detail_get"} 0.148614815
+kos_openstack_api_request_duration_seconds_count{request="compute_quotasets_detail_get"} 1
 kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.005"} 0
 kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.01"} 0
 kos_openstack_api_request_duration_seconds_bucket{request="floating_ip_list",le="0.025"} 0
