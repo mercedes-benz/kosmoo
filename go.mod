@@ -4,7 +4,7 @@ module github.com/daimler/kosmoo
 go 1.12
 
 require (
-	github.com/gophercloud/gophercloud v0.22.0
+	github.com/gophercloud/gophercloud v0.24.0
 	github.com/prometheus/client_golang v1.11.0
 	gopkg.in/ini.v1 v1.66.4
 	k8s.io/api v0.22.2
