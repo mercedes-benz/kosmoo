@@ -56,6 +56,9 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 		klog.Warningf("Unable to extract load balancers: %v", err)
 		return err
 	}
+	if len(loadBalancerList) == 0 {
+		klog.Info("No load balancers found. Skipping load balancer metrics.")
+	}
 
 	// second step: reset the old metrics
 	loadbalancerAdminStateUp.Reset()
