@@ -14,6 +14,9 @@ var (
 	neutronFloatingIPCreated   *prometheus.GaugeVec
 	neutronFloatingIPUpdatedAt *prometheus.GaugeVec
 
+	// Status from https://docs.openstack.org/api-ref/network/v2/index.html?expanded=show-floating-ip-details-detail#show-floating-ip-details
+	floatingIpStatus = []string{"ACTIVE", "DOWN", "ERROR"}
+
 	floatingIPLabels = []string{"id", "floating_ip", "fixed_ip", "port_id"}
 )
 
@@ -23,7 +26,7 @@ func registerNeutronMetrics() {
 			Name: generateName("neutron_floating_ip_status"),
 			Help: "Neutron floating ip status",
 		},
-		floatingIPLabels,
+		append(floatingIPLabels, "status"),
 	)
 	neutronFloatingIPCreated = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -65,6 +68,7 @@ func PublishNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID st
 
 	// second step: reset the old metrics
 	neutronFloatingIPStatus.Reset()
+	neutronFloatingIPUpdatedAt.Reset()
 
 	// third step: publish the metrics
 	for _, fip := range floatingIPList {
@@ -78,7 +82,12 @@ func PublishNeutronMetrics(neutronClient *gophercloud.ServiceClient, tenantID st
 func publishFloatingIPMetric(fip floatingips.FloatingIP) {
 	labels := []string{fip.ID, fip.FloatingIP, fip.FixedIP, fip.PortID}
 
-	neutronFloatingIPStatus.WithLabelValues(labels...).Set(1)
 	neutronFloatingIPCreated.WithLabelValues(labels...).Set(float64(fip.CreatedAt.Unix()))
 	neutronFloatingIPUpdatedAt.WithLabelValues(labels...).Set(float64(fip.UpdatedAt.Unix()))
+
+	for _, status := range floatingIpStatus {
+		statusLabels := append(labels, status)
+		neutronFloatingIPStatus.WithLabelValues(statusLabels...).Set(boolFloat64(fip.Status == status))
+	}
+
 }
