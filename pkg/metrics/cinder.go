@@ -168,7 +168,7 @@ func publishVolumeMetrics(v volumes.Volume, pv *corev1.PersistentVolume) {
 	k8sMetadata := extractK8sMetadata(pv)
 
 	// add the k8s specific labels.
-	// We do not need need to check them, because the empty string is totally fine.
+	// We do not need to check them, because the empty string is totally fine.
 	labels = append(labels, k8sMetadata...)
 
 	// set the volume-specific metrics
