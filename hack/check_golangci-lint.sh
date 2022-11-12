@@ -3,7 +3,7 @@
 
 set -e
 
-GOLANGCILINT_VERSION="1.41.1"
+GOLANGCILINT_VERSION="1.50.0"
 GOLANGCILINT_FILENAME="golangci-lint-${GOLANGCILINT_VERSION}-linux-amd64.tar.gz"
 GOLANGCILINT_URL="https://github.com/golangci/golangci-lint/releases/download/v${GOLANGCILINT_VERSION}/${GOLANGCILINT_FILENAME}"
 
