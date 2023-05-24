@@ -22,7 +22,7 @@ spec:
       - args:
         - -refresh-interval=300
         - -cloud-conf=/etc/cloud.conf
-        image: docker.pkg.github.com/daimler/kosmoo/kosmoo:latest
+        image: docker.pkg.github.com/mercedes-benz/kosmoo/kosmoo:latest
         imagePullPolicy: Always
         name: exporter
         ports:

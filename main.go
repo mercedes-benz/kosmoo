@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/daimler/kosmoo/pkg/metrics"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/prometheus/client_golang/prometheus"
@@ -20,6 +19,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
+
+	"github.com/mercedes-benz/kosmoo/pkg/metrics"
 )
 
 var (
