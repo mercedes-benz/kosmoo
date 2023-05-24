@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-module github.com/daimler/kosmoo
+module github.com/mercedes-benz/kosmoo
 
 go 1.12
 
