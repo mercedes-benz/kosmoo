@@ -295,7 +295,7 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 }
 
 func getClients(provider *gophercloud.ProviderClient, endpointOpts gophercloud.EndpointOpts) (cinder, neutron, loadbalancer, compute *gophercloud.ServiceClient, err error) {
-	cinderClient, err := openstack.NewBlockStorageV2(provider, endpointOpts)
+	cinderClient, err := openstack.NewBlockStorageV3(provider, endpointOpts)
 	if err != nil {
 		return nil, nil, nil, nil, fmt.Errorf("unable to get cinder client: %v", err)
 	}
