@@ -1,8 +1,8 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Kosmoo
 
-[![Build Status](https://github.com/Daimler/kosmoo/workflows/.github%2Fworkflows%2Fci.yml/badge.svg)](https://github.com/Daimler/kosmoo/actions?query=workflow%3A.github%2Fworkflows%2Fci.yml)
-[![Release Status](https://github.com/Daimler/kosmoo/workflows/release/badge.svg)](https://github.com/Daimler/kosmoo/actions?query=workflow%3Arelease)
+[![Build Status](https://github.com/mercedes-benz/kosmoo/workflows/.github%2Fworkflows%2Fci.yml/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=workflow%3A.github%2Fworkflows%2Fci.yml)
+[![Release Status](https://github.com/mercedes-benz/kosmoo/workflows/release/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=workflow%3Arelease)
 
 *Kosmoo* exposes metrics about:
 * [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) by queries to the Kubernetes API
@@ -17,9 +17,9 @@
 To build the exporter from the source code yourself you need to have a working Go environment with [version 1.12 or greater installed](https://golang.org/doc/install).
 
 ```
-$ mkdir -p $GOPATH/src/github.com/daimler
-$ cd $GOPATH/src/github.com/daimler
-$ git clone https://github.com/daimler/kosmoo.git
+$ mkdir -p $GOPATH/src/github.com/mercedes-benz
+$ cd $GOPATH/src/github.com/mercedes-benz
+$ git clone https://github.com/mercedes-benz/kosmoo.git
 $ cd kosmoo
 $ make build
 ```
@@ -75,7 +75,7 @@ Usage of ./kosmoo:
 ## Deployment to Kubernetes
 
 *kosmoo* can get deployed as a deployment. See the [instructions](kubernetes/) how to get started.
-You can also use the docker images under [packages](https://github.com/Daimler/kosmoo/packages), 
+You can also use the docker images under [packages](https://github.com/mercedes-benz/kosmoo/packages), 
 see also [authenticating-to-github-package-registry](https://help.github.com/en/articles/configuring-docker-for-use-with-github-package-registry#authenticating-to-github-package-registry).
 
 
@@ -101,6 +101,6 @@ Full information on the license for this software is available in the [LICENSE](
 
 # Provider Information
 
-Please visit https://www.daimler-tss.com/en/imprint/ for information on the provider.
+Please visit https://www.mercedes-benz-techinnovation.com/en/imprint/ for information on the provider.
 
 Notice: Before you use the program in productive use, please take all necessary precautions, e.g. testing and verifying the program with regard to your specific use. The program was tested solely for our own use cases, which might differ from yours.
