@@ -12,7 +12,7 @@ VERSION ?= $(shell git describe --tags --exact-match || \
 
 SRCS = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
-REGISTRY ?= docker.pkg.github.com/daimler/kosmoo
+REGISTRY ?= docker.pkg.github.com/mercedes-benz/kosmoo
 
 all: test build docker
 

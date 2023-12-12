@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/daimler/kosmoo/pkg/metrics"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/prometheus/client_golang/prometheus"
@@ -20,6 +19,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
+
+	"github.com/mercedes-benz/kosmoo/pkg/metrics"
 )
 
 var (
@@ -294,7 +295,7 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 }
 
 func getClients(provider *gophercloud.ProviderClient, endpointOpts gophercloud.EndpointOpts) (cinder, neutron, loadbalancer, compute *gophercloud.ServiceClient, err error) {
-	cinderClient, err := openstack.NewBlockStorageV2(provider, endpointOpts)
+	cinderClient, err := openstack.NewBlockStorageV3(provider, endpointOpts)
 	if err != nil {
 		return nil, nil, nil, nil, fmt.Errorf("unable to get cinder client: %v", err)
 	}
