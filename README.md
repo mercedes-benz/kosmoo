@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Kosmoo
 
-[![Build Status](https://github.com/mercedes-benz/kosmoo/workflows/.github%2Fworkflows%2Fci.yml/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=workflow%3A.github%2Fworkflows%2Fci.yml)
+[![Build Status](https://github.com/mercedes-benz/kosmoo/actions/workflows/ci.yml/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=.github%2Fworkflows%2Fci.yml)
 [![Release Status](https://github.com/mercedes-benz/kosmoo/workflows/release/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=workflow%3Arelease)
 
 *Kosmoo* exposes metrics about:
