@@ -263,7 +263,7 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 		}
 
 		if err := metrics.PublishFirewallV2Metrics(neutronClient, tenantID); err != nil {
-			err := logError("scraping firewall v1 metrics failed: %v", err)
+			err := logError("scraping firewall v2 metrics failed: %v", err)
 			errs = append(errs, err)
 		}
 	}
