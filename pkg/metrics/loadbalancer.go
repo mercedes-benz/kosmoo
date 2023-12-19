@@ -4,10 +4,12 @@ package metrics
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/listeners"
 	"github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/loadbalancers"
 	"github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/pools"
 	"github.com/prometheus/client_golang/prometheus"
 	"k8s.io/klog/v2"
+	"strconv"
 )
 
 var (
@@ -15,17 +17,19 @@ var (
 	loadbalancerStatus                       *prometheus.GaugeVec
 	loadbalancerPoolProvisioningStatus       *prometheus.GaugeVec
 	loadbalancerPoolMemberProvisioningStatus *prometheus.GaugeVec
+	listenerStatus                           *prometheus.GaugeVec
 
 	// possible load balancer provisioning states, from https://github.com/openstack/octavia-lib/blob/fe022cdf14604206af783c8a0887c008c48fd053/octavia_lib/common/constants.py#L169
-	provisioningStates = []string{"ALLOCATED", "BOOTING", "READY", "ACTIVE", "PENDING_DELETE", "PENDING_UPDATE", "PENDING_CREATE", "DELETED", "ERROR"}
+	loadbalancerProvisioningStates = []string{"ALLOCATED", "BOOTING", "READY", "ACTIVE", "PENDING_DELETE", "PENDING_UPDATE", "PENDING_CREATE", "DELETED", "ERROR"}
 
 	// https://github.com/gophercloud/gophercloud/blob/0ffab06fc18e06ed9544fe10b385f0a59492fdb5/openstack/loadbalancer/v2/pools/results.go#L100
 	// Possible states ACTIVE, PENDING_* or ERROR.
-	poolProvisioningStates = []string{"ACTIVE", "PENDING_DELETE", "PENDING_CREATE", "PENDING_UPDATE", "ERROR"}
+	provisioningStates = []string{"ACTIVE", "PENDING_DELETE", "PENDING_CREATE", "PENDING_UPDATE", "ERROR"}
 
 	loadBalancerLabels = []string{"id", "name", "vip_address", "provider", "port_id"}
 	poolLabels         = []string{"pool_id", "pool_name"}
 	poolMemberLabels   = []string{"member_id", "member_name"}
+	listenerLabels     = []string{"id", "name", "port", "protocol", "loadbalancer_id"}
 )
 
 func registerLoadBalancerMetrics() {
@@ -59,11 +63,19 @@ func registerLoadBalancerMetrics() {
 		},
 		append(append(append(loadBalancerLabels, poolLabels...), poolMemberLabels...), "pool_member_provisioning_status"),
 	)
+	listenerStatus = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("listener_status"),
+			Help: "Listener status",
+		},
+		append(listenerLabels, "status"),
+	)
 
 	prometheus.MustRegister(loadbalancerAdminStateUp)
 	prometheus.MustRegister(loadbalancerStatus)
 	prometheus.MustRegister(loadbalancerPoolProvisioningStatus)
 	prometheus.MustRegister(loadbalancerPoolMemberProvisioningStatus)
+	prometheus.MustRegister(listenerStatus)
 }
 
 // PublishLoadBalancerMetrics makes the list request to the load balancer api and
@@ -113,6 +125,49 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 	return nil
 }
 
+func PublishListenerMetrics(client *gophercloud.ServiceClient, tenantID string) error {
+	// first step: gather the data
+	mc := newOpenStackMetric("listener", "list")
+	pages, err := listeners.List(client, listeners.ListOpts{}).AllPages()
+	if mc.Observe(err) != nil {
+		// only warn, maybe the next list will work.
+		klog.Warningf("Unable to list listeners: %v", err)
+		return err
+	}
+	listenerList, err := listeners.ExtractListeners(pages)
+	if err != nil {
+		// only warn, maybe the next publish will work.
+		klog.Warningf("Unable to extract listeners: %v", err)
+		return err
+	}
+	if len(listenerList) == 0 {
+		klog.Info("No listeners found. Skipping listeners metrics.")
+	}
+
+	// second step: reset the old metrics
+	listenerStatus.Reset()
+
+	// third step: publish the metrics
+	for _, listener := range listenerList {
+		publishListenerMetric(listener)
+	}
+	return nil
+}
+
+func publishListenerMetric(listener listeners.Listener) {
+	labels := []string{listener.ID, listener.Name, listener.Protocol, strconv.Itoa(listener.ProtocolPort)}
+
+	// create one metric per provisioning status
+	for _, state := range provisioningStates {
+
+		// create one metric per loadbalancer id
+		for _, lbId := range listener.Loadbalancers {
+			stateLabels := append(labels, lbId.ID, state)
+			listenerStatus.WithLabelValues(stateLabels...).Set(boolFloat64(listener.ProvisioningStatus == state))
+		}
+	}
+}
+
 // publishLoadBalancerMetric extracts data from a load balancer and exposes the metrics via prometheus
 func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
 	labels := []string{lb.ID, lb.Name, lb.VipAddress, lb.Provider, lb.VipPortID}
@@ -120,7 +175,7 @@ func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
 	loadbalancerAdminStateUp.WithLabelValues(labels...).Set(boolFloat64(lb.AdminStateUp))
 
 	// create one metric per provisioning status
-	for _, state := range provisioningStates {
+	for _, state := range loadbalancerProvisioningStates {
 		stateLabels := append(labels, state)
 		loadbalancerStatus.WithLabelValues(stateLabels...).Set(boolFloat64(lb.ProvisioningStatus == state))
 	}
@@ -129,7 +184,7 @@ func publishLoadBalancerMetric(lb loadbalancers.LoadBalancer) {
 func publishPoolStatus(lb loadbalancers.LoadBalancer, pool pools.Pool) {
 	labels := []string{lb.ID, lb.Name, lb.VipAddress, lb.Provider, lb.VipPortID, pool.ID, pool.Name}
 
-	for _, state := range poolProvisioningStates {
+	for _, state := range provisioningStates {
 		stateLabels := append(labels, state)
 		loadbalancerPoolProvisioningStatus.WithLabelValues(stateLabels...).Set(boolFloat64(pool.ProvisioningStatus == state))
 	}
@@ -138,7 +193,7 @@ func publishPoolStatus(lb loadbalancers.LoadBalancer, pool pools.Pool) {
 func publishMemberStatus(lb loadbalancers.LoadBalancer, pool pools.Pool, member pools.Member) {
 	labels := []string{lb.ID, lb.Name, lb.VipAddress, lb.Provider, lb.VipPortID, pool.ID, pool.Name, member.ID, member.Name}
 
-	for _, state := range poolProvisioningStates {
+	for _, state := range provisioningStates {
 		stateLabels := append(labels, state)
 		loadbalancerPoolMemberProvisioningStatus.WithLabelValues(stateLabels...).Set(boolFloat64(member.ProvisioningStatus == state))
 	}
