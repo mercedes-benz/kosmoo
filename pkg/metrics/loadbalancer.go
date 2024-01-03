@@ -99,12 +99,20 @@ func PublishLoadBalancerMetrics(client *gophercloud.ServiceClient, tenantID stri
 
 		// for the pools associated with the loadbalancer
 		for _, poolWithOnlyId := range lb.Pools {
-			pool, _ := pools.Get(client, poolWithOnlyId.ID).Extract()
+			pool, err := pools.Get(client, poolWithOnlyId.ID).Extract()
+			if err != nil {
+				klog.Warningf("Unable to get pool %s: %v", poolWithOnlyId.ID, err)
+				continue
+			}
 			publishPoolStatus(lb, *pool)
 
 			// for the pool members
 			for _, memberWithOnlyId := range pool.Members {
-				member, _ := pools.GetMember(client, pool.ID, memberWithOnlyId.ID).Extract()
+				member, err := pools.GetMember(client, pool.ID, memberWithOnlyId.ID).Extract()
+				if err != nil {
+					klog.Warningf("Unable to get member %s of pool %s: %v", memberWithOnlyId.ID, poolWithOnlyId.ID, err)
+					continue
+				}
 				publishMemberStatus(lb, *pool, *member)
 			}
 		}
