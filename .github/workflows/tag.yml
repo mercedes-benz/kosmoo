@@ -27,11 +27,11 @@ jobs:
         make all
     - name: generate changelog from git
       run: |
-        echo "Image is available at \`docker.pkg.github.com/mercedes-benz/kosmoo/kosmoo:$(git describe --tags --exact-match)\`." > ${{ github.workflow }}-CHANGELOG.txt
+        echo "Image is available at \`ghcr.io/mercedes-benz/kosmoo/kosmoo:$(git describe --tags --exact-match)\`." > ${{ github.workflow }}-CHANGELOG.txt
         git log --format=format:"* %h %s" $(git describe --tags --abbrev=0 @^)..@ >> ${{ github.workflow }}-CHANGELOG.txt
     - name: push to package registry
       run: |
-        docker login docker.pkg.github.com -u chrischdi -p "${PACKAGE_REPO_TOKEN}" 
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
         make push
       env:
         PACKAGE_REPO_TOKEN: ${{ secrets.PACKAGE_REPO_TOKEN }}
