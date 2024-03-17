@@ -252,6 +252,11 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 			errs = append(errs, err)
 		}
 
+		if err := metrics.PublishListenerMetrics(loadbalancerClient, tenantID); err != nil {
+			err := logError("scraping listener metrics failed: %v", err)
+			errs = append(errs, err)
+		}
+
 		if err := metrics.PublishServerMetrics(computeClient, tenantID); err != nil {
 			err := logError("scraping server metrics failed: %v", err)
 			errs = append(errs, err)
@@ -263,7 +268,7 @@ func updateMetrics(provider *gophercloud.ProviderClient, eo gophercloud.Endpoint
 		}
 
 		if err := metrics.PublishFirewallV2Metrics(neutronClient, tenantID); err != nil {
-			err := logError("scraping firewall v1 metrics failed: %v", err)
+			err := logError("scraping firewall v2 metrics failed: %v", err)
 			errs = append(errs, err)
 		}
 	}
