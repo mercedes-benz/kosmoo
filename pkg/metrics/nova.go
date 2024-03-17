@@ -8,6 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/compute/v2/servers"
 	"github.com/prometheus/client_golang/prometheus"
 	"k8s.io/klog/v2"
+	"strings"
 )
 
 var (
@@ -22,7 +23,7 @@ var (
 	// possible server states, from https://github.com/openstack/nova/blob/master/nova/objects/fields.py#L949
 	states = []string{"ACTIVE", "BUILDING", "PAUSED", "SUSPENDED", "STOPPED", "RESCUED", "RESIZED", "SOFT_DELETED", "DELETED", "ERROR", "SHELVED", "SHELVED_OFFLOADED"}
 
-	serverLabels = []string{"id", "name"}
+	serverLabels = []string{"id", "name", "env", "env_detected"}
 )
 
 func registerServerMetrics() {
@@ -128,7 +129,20 @@ func PublishServerMetrics(client *gophercloud.ServiceClient, tenantID string) er
 
 // publishServerMetric extracts data from a server and exposes the metrics via prometheus
 func publishServerMetric(srv servers.Server) {
-	labels := []string{srv.ID, srv.Name}
+
+	// Pick up from OpenStack metadata
+	environment := ""
+	if env, exists := srv.Metadata["env"]; exists {
+		environment = env
+	}
+
+	// We could also use the naming to detect env.
+	environmentFromName := ""
+	if strings.Contains(srv.Name, "test-2") {
+		environmentFromName = "test-2"
+	}
+
+	labels := []string{srv.ID, srv.Name, environment, environmentFromName}
 
 	serverVolumeAttachmentCount.WithLabelValues(labels...).Set(float64(len(srv.AttachedVolumes)))
 	for _, attachedVolumeID := range srv.AttachedVolumes {
