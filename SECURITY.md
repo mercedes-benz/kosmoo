@@ -3,4 +3,4 @@ It is Daimler’s goal to offer its customers the best and most secure products 
 
 For further Information please visit our Vulnerability Reporting Policy:
 
-<https://www.daimler.com/whitehat/>
+<https://www.mercedes-benz.com/en/whitehat/>
