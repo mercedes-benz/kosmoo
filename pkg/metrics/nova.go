@@ -15,10 +15,11 @@ var (
 	computeQuotaFloatingIPs     *prometheus.GaugeVec
 	computeQuotaInstances       *prometheus.GaugeVec
 	computeQuotaRAM             *prometheus.GaugeVec
+	computeQuotaServerGroupMembers *prometheus.GaugeVec
 	serverStatus                *prometheus.GaugeVec
 	serverVolumeAttachment      *prometheus.GaugeVec
 	serverVolumeAttachmentCount *prometheus.GaugeVec
-
+	
 	// possible server states, from https://github.com/openstack/nova/blob/master/nova/objects/fields.py#L949
 	states = []string{"ACTIVE", "BUILDING", "PAUSED", "SUSPENDED", "STOPPED", "RESCUED", "RESIZED", "SOFT_DELETED", "DELETED", "ERROR", "SHELVED", "SHELVED_OFFLOADED"}
 
@@ -54,6 +55,13 @@ func registerServerMetrics() {
 		},
 		[]string{"quota_type"},
 	)
+	computeQuotaServerGroupMembers = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: generateName("compute_quota_server_group_members"),
+			Help: "Number of members allowed per server group",
+		},
+		[]string{"quota_type"},
+	)
 	serverStatus = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: generateName("server_status"),
@@ -80,6 +88,7 @@ func registerServerMetrics() {
 	prometheus.MustRegister(computeQuotaFloatingIPs)
 	prometheus.MustRegister(computeQuotaInstances)
 	prometheus.MustRegister(computeQuotaRAM)
+	prometheus.MustRegister(computeQuotaServerGroupMembers)
 	prometheus.MustRegister(serverStatus)
 	prometheus.MustRegister(serverVolumeAttachmentCount)
 	prometheus.MustRegister(serverVolumeAttachment)
@@ -155,6 +164,10 @@ func publishComputeQuotaMetrics(q quotasets.QuotaDetailSet) {
 	computeQuotaInstances.WithLabelValues("in-use").Set(float64(q.Instances.InUse))
 	computeQuotaInstances.WithLabelValues("reserved").Set(float64(q.Instances.Reserved))
 	computeQuotaInstances.WithLabelValues("limit").Set(float64(q.Instances.Limit))
+
+	computeQuotaServerGroupMembers.WithLabelValues("in-use").Set(float64(q.ServerGroupMembers.InUse))
+	computeQuotaServerGroupMembers.WithLabelValues("reserved").Set(float64(q.ServerGroupMembers.Reserved))
+	computeQuotaServerGroupMembers.WithLabelValues("limit").Set(float64(q.ServerGroupMembers.Limit))
 
 	computeQuotaRAM.WithLabelValues("in-use").Set(float64(q.RAM.InUse))
 	computeQuotaRAM.WithLabelValues("reserved").Set(float64(q.RAM.Reserved))
