@@ -1,4 +1,6 @@
 <!-- SPDX-License-Identifier: MIT -->
+# This project is no longer maintained and is archived.
+
 # Kosmoo
 
 [![Build Status](https://github.com/mercedes-benz/kosmoo/actions/workflows/ci.yml/badge.svg)](https://github.com/mercedes-benz/kosmoo/actions?query=.github%2Fworkflows%2Fci.yml)
